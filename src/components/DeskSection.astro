@@ -30,15 +30,13 @@ const spotlight = total >= 5;
 const feature = posts[0];
 const rest = posts.slice(1);
 
-// Pick the column count that fills whole rows: 2 and 4 go two-up (4 becomes
-// four-up on wide screens), 3 goes three-up. Nothing is left orphaned on a row
-// of its own, and five or more earns the spotlight above instead.
+// Three stories fill one row of the page's three-column spine; two or four go
+// two-up (four as a 2x2) so nothing is orphaned on a row of its own. Five or
+// more earns the spotlight above instead.
 const gridClass =
-  total === 4
-    ? 'grid-cards col-rules-2-4 grid gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-4'
-    : total === 3
-      ? 'grid-cards col-rules-3 grid gap-x-8 gap-y-10 md:grid-cols-3'
-      : 'grid-cards col-rules-2 grid gap-x-8 gap-y-10 md:grid-cols-2';
+  total === 3
+    ? 'grid-cards col-rules-3 grid gap-x-8 gap-y-10 md:grid-cols-3'
+    : 'grid-cards col-rules-2 grid gap-x-8 gap-y-10 md:grid-cols-2';
 ---
 
 <section class="mx-auto max-w-7xl px-5 pt-20 sm:px-6 lg:px-10">
@@ -67,9 +65,11 @@ const gridClass =
 
   {
     spotlight && feature ? (
-      <div class="grid-cards grid gap-x-8 gap-y-8 lg:grid-cols-[1.15fr_0.85fr]">
-        <StoryFeature post={feature} />
-        <div class="lg:border-l lg:border-border lg:pl-8">
+      <div class="grid-cards col-rules-split grid gap-x-8 gap-y-8 lg:grid-cols-3">
+        <div class="flex min-w-0 flex-col lg:col-span-2">
+          <StoryFeature post={feature} />
+        </div>
+        <div class="flex flex-col">
           {rest.slice(0, 4).map((post) => (
             <StoryMini post={post} />
           ))}

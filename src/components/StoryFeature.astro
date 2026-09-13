@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import { readingTime, type Post } from '../lib/posts';
-import { halfSizes, leadWidths } from '../lib/images';
+import { leadSizes, leadWidths } from '../lib/images';
 import { formatDateShort } from '../lib/format';
 import { authorBySlug } from '../data/authors';
 import CategoryChip from './CategoryChip.astro';
@@ -23,7 +23,7 @@ const author = authorBySlug.get(post.data.author);
     <Image
       src={post.data.cover}
       widths={leadWidths}
-      sizes={halfSizes}
+      sizes={leadSizes}
       alt={post.data.coverAlt}
       loading="lazy"
       decoding="async"

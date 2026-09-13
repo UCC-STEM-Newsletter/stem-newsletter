@@ -356,13 +356,21 @@ a:hover .category-chip:not(.category-chip-on-image) {
   border-top: 2px solid var(--rule);
 }
 
-/* Hairline rules between grid columns. */
-:is(.col-rules-2, .col-rules-3, .col-rules-2-4) > * {
+/* Hairline rules between grid columns.
+ *
+ * The rule sits half a gutter to the left of its column, so it reads as a
+ * divider in the gap. `.col-rules-split` reproduces that geometry for
+ * two-part layouts — a feature spanning two columns beside a rail — so their
+ * divider lands on exactly the same line as a three-column grid's second one.
+ * It only applies from `lg`, below which the two parts stack and a vertical
+ * rule would be wrong.
+ */
+:is(.col-rules-2, .col-rules-3) > * {
   position: relative;
 }
 
 @media (width >= 768px) {
-  :is(.col-rules-2, .col-rules-3, .col-rules-2-4) > *::after {
+  :is(.col-rules-2, .col-rules-3) > *::after {
     content: '';
     position: absolute;
     top: 0;
@@ -372,19 +380,25 @@ a:hover .category-chip:not(.category-chip-on-image) {
     background: var(--border);
   }
 
-  :is(.col-rules-2, .col-rules-2-4) > :nth-child(odd)::after,
+  .col-rules-2 > :nth-child(odd)::after,
   .col-rules-3 > :nth-child(3n + 1)::after {
     content: none;
   }
 }
 
 @media (width >= 1024px) {
-  .col-rules-2-4 > :nth-child(odd)::after {
-    content: '';
+  .col-rules-split > * {
+    position: relative;
   }
 
-  .col-rules-2-4 > :nth-child(4n + 1)::after {
-    content: none;
+  .col-rules-split > :nth-child(2)::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -1rem;
+    width: 1px;
+    background: var(--border);
   }
 }
 

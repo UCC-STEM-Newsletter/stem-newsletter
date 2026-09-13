@@ -34,7 +34,7 @@ export interface Composition {
   picks: number;
   /** A desk needs at least this many stories to earn its own block. */
   deskMinimum: number;
-  /** Items in the closing catch-all grid; zero means unlimited. */
+  /** Items in the closing catch-all grid (a multiple of three); zero means unlimited. */
   closing: number;
 }
 
@@ -68,10 +68,10 @@ export const compositionFor = (count: number): Composition => {
   const splitBand = count >= SPLIT_BAND_FROM;
 
   if (tier === 'C') {
-    return { tier, splitBand, tiles: 3, latest: 5, picks: 6, deskMinimum: 2, closing: 8 };
+    return { tier, splitBand, tiles: 3, latest: 5, picks: 6, deskMinimum: 2, closing: 9 };
   }
   if (tier === 'B') {
-    return { tier, splitBand, tiles: 3, latest: 4, picks: 6, deskMinimum: 2, closing: 8 };
+    return { tier, splitBand, tiles: 3, latest: 4, picks: 6, deskMinimum: 2, closing: 9 };
   }
   return { tier, splitBand, tiles: 3, latest: 2, picks: 0, deskMinimum: 1, closing: 0 };
 };

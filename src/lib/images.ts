@@ -11,7 +11,6 @@ export const tileWidths = [360, 480, 720, 960];
 
 export const leadSizes = '(min-width: 1024px) 66vw, 100vw';
 export const tileSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw';
-export const halfSizes = '(min-width: 1024px) 50vw, 100vw';
 export const articleSizes = '(min-width: 1280px) 1216px, calc(100vw - 3rem)';
 
 /** Square rail thumbnails are pre-cropped, matching the reference markup. */

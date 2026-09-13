@@ -19,14 +19,14 @@ export const categories: Category[] = [
     slug: 'science',
     name: 'Science',
     description:
-      'Research, experiments, and discoveries across biology, chemistry, physics, and the environment.',
+      'Research across biology, chemistry, physics, and the planet.',
     accent: 'science',
   },
   {
     slug: 'technology',
     name: 'Technology',
     description:
-      'Computing, artificial intelligence, software, and the systems shaping how we work and learn.',
+      'Computing, artificial intelligence, and the systems we build.',
     accent: 'technology',
   },
   {
@@ -38,7 +38,7 @@ export const categories: Category[] = [
   {
     slug: 'mathematics',
     name: 'Mathematics',
-    description: 'Pure and applied mathematics, statistics, modelling, and data.',
+    description: 'Pure and applied maths, statistics, modelling, and data.',
     accent: 'mathematics',
   },
 ];

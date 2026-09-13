@@ -20,13 +20,6 @@ const activeCategory = Astro.url.pathname.match(/^\/category\/([^/]+)\//)?.[1];
       <span class="hidden sm:inline">{site.tagline}</span>
       <div class="flex items-center gap-4">
         <a href="/all-news/" class="hover:text-foreground">Archive</a>
-        <a
-          href="/rss.xml"
-          class="inline-grid place-items-center hover:text-foreground"
-          aria-label="RSS feed"
-        >
-          <Icon name="rss" class="h-3.5 w-3.5" />
-        </a>
         <button
           type="button"
           class="theme-toggle inline-grid place-items-center hover:text-foreground"
