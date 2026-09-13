@@ -1,7 +1,6 @@
 ---
 import { site, footerColumns } from '../data/site';
 import { categories } from '../data/categories';
-import Icon from './Icon.astro';
 ---
 
 <footer class="newsroom-footer mt-28 bg-surface">
@@ -15,35 +14,6 @@ import Icon from './Icon.astro';
         aria-label="Catalyst home">Catalyst</a
       >
       <p class="mt-5 max-w-sm text-sm leading-6 text-muted-foreground">{site.description}</p>
-      <div class="mt-6 flex flex-wrap gap-2 text-muted-foreground">
-        <a
-          href={site.social.linkedin}
-          class="icon-button h-10 w-10"
-          aria-label="Catalyst on LinkedIn"
-          rel="noreferrer"
-        >
-          <Icon name="linkedin" class="h-4 w-4" />
-        </a>
-        <a
-          href={site.social.x}
-          class="icon-button h-10 w-10"
-          aria-label="Catalyst on X"
-          rel="noreferrer"
-        >
-          <Icon name="x" class="h-4 w-4" />
-        </a>
-        <a
-          href={site.social.youtube}
-          class="icon-button h-10 w-10"
-          aria-label="Catalyst on YouTube"
-          rel="noreferrer"
-        >
-          <Icon name="youtube" class="h-4 w-4" />
-        </a>
-        <a href="/rss.xml" class="icon-button h-10 w-10" aria-label="RSS feed">
-          <Icon name="rss" class="h-4 w-4" />
-        </a>
-      </div>
     </div>
 
     <div>

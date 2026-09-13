@@ -5,8 +5,8 @@
  * and mathematics. It publishes when there is something worth saying rather
  * than on a fixed schedule, so nothing here assumes a daily cadence.
  *
- * NOTE: the social links and contact address below are placeholders — swap them
- * for the real accounts before launch.
+ * NOTE: the contact address below is a placeholder — swap it for the real one
+ * before launch.
  */
 
 export const site = {
@@ -18,11 +18,6 @@ export const site = {
   publisher: 'Catalyst',
   locale: 'en_US',
   localeShort: 'en-us',
-  social: {
-    linkedin: 'https://example.com',
-    x: 'https://example.com',
-    youtube: 'https://example.com',
-  },
   editorialEmail: 'editorial@example.com',
 } as const;
 
@@ -33,17 +28,13 @@ export const footerColumns = [
       { label: 'About', href: '/about/' },
       { label: 'Contribute', href: '/contribute/' },
       { label: 'Contact', href: '/contact/' },
-      { label: 'Privacy', href: '/privacy/' },
     ],
   },
   {
     heading: 'Resources',
     links: [
       { label: 'All stories', href: '/all-news/' },
-      { label: 'Authors', href: '/authors/' },
-      { label: 'RSS', href: '/rss.xml' },
-      { label: 'Robots', href: '/robots.txt' },
-      { label: 'Sitemap', href: '/sitemap-index.xml' },
+      { label: 'Contributors', href: '/authors/' },
     ],
   },
 ] as const;

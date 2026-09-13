@@ -487,24 +487,6 @@ a:hover .category-chip:not(.category-chip-on-image) {
   color: var(--primary);
 }
 
-.icon-button {
-  display: inline-grid;
-  place-items: center;
-  border: 1px solid var(--border-strong);
-  color: var(--muted-foreground);
-  transition:
-    border-color 0.2s var(--ease-out),
-    color 0.2s var(--ease-out),
-    background-color 0.2s var(--ease-out);
-}
-
-.icon-button:hover,
-.icon-button:focus-visible {
-  border-color: var(--foreground);
-  background: var(--foreground);
-  color: var(--background);
-}
-
 /* ------------------------------------------------------------- article rail */
 
 .article-rail {

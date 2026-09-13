@@ -53,7 +53,15 @@ const rows = authors
                 <span class="mt-1 block text-sm text-muted-foreground">{author.role}</span>
               </span>
             </span>
-            <span class="mt-4 block text-pretty text-sm leading-6 text-muted-foreground">
+            {/*
+              Every card reserves exactly three lines for the bio, so the story
+              count and its rule sit at the same height across the row whatever
+              the bio length. `3lh` tracks the `leading-6` beside it, and the
+              clamp stops an unusually long bio from pushing the card taller.
+            */}
+            <span
+              class="mt-4 line-clamp-3 block min-h-[3lh] text-pretty text-sm leading-6 text-muted-foreground"
+            >
               {author.bio}
             </span>
             <span class="eyebrow mt-5 block border-t border-border pt-3 text-primary">
