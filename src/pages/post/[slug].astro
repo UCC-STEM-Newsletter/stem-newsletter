@@ -6,12 +6,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import CategoryChip from '../../components/CategoryChip.astro';
 import Lucide from '../../components/Lucide.astro';
 import StoryTile from '../../components/StoryTile.astro';
-import Newsletter from '../../components/Newsletter.astro';
 import ShareTrigger from '../../components/ShareTrigger.astro';
 import ShareSheet from '../../components/ShareSheet.astro';
 import { site } from '../../data/site';
 import { categories } from '../../data/categories';
-import { tagBySlug } from '../../data/tags';
 import { authorBySlug } from '../../data/authors';
 import { allPosts, adjacentPosts, postsByCategory, readingTime } from '../../lib/posts';
 import { formatDate, isoDate } from '../../lib/format';
@@ -40,7 +38,6 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { post, previous, next, related } = Astro.props;
 const { Content, headings } = await render(post);
 const author = authorBySlug.get(post.data.author);
-const tags = post.data.tags.map((slug) => tagBySlug.get(slug) ?? { slug, name: slug });
 const toc = headings.filter((heading) => heading.depth === 2);
 const canonical = new URL(`/post/${post.id}/`, Astro.site);
 const coverUrl = new URL(post.data.cover.src, Astro.site);
@@ -167,28 +164,6 @@ const coverUrl = new URL(post.data.cover.src, Astro.site);
           </nav>
 
           {
-            tags.length > 0 && (
-              <nav aria-labelledby="article-tags">
-                <p id="article-tags" class="eyebrow mb-4 text-muted-foreground">
-                  Tags
-                </p>
-                <ul class="flex flex-wrap gap-2">
-                  {tags.map((tag) => (
-                    <li>
-                      <a
-                        href={`/tag/${tag.slug}/`}
-                        class="button-quiet inline-flex px-2.5 py-1 font-mono text-[10px] tracking-[0.18em] uppercase"
-                      >
-                        {tag.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            )
-          }
-
-          {
             toc.length > 0 && (
               <nav aria-labelledby="article-toc">
                 <p id="article-toc" class="eyebrow mb-4 text-muted-foreground">
@@ -251,9 +226,6 @@ const coverUrl = new URL(post.data.cover.src, Astro.site);
           </div>
         </nav>
 
-        <div class="mt-14">
-          <Newsletter variant="compact" />
-        </div>
       </div>
     </div>
   </article>

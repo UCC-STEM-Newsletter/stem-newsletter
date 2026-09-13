@@ -4,7 +4,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import StoryOverlay from '../../components/StoryOverlay.astro';
 import StoryMini from '../../components/StoryMini.astro';
 import StoryTile from '../../components/StoryTile.astro';
-import Newsletter from '../../components/Newsletter.astro';
 import { site } from '../../data/site';
 import { categories, categoryBySlug } from '../../data/categories';
 import { allPosts, postsByCategory } from '../../lib/posts';
@@ -109,7 +108,4 @@ const [lead, ...rest] = posts;
     </div>
   </section>
 
-  <section class="mx-auto max-w-7xl px-6 pt-24 lg:px-10">
-    <Newsletter />
-  </section>
 </BaseLayout>

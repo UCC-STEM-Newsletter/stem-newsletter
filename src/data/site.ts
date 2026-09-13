@@ -31,9 +31,8 @@ export const footerColumns = [
     heading: 'Publication',
     links: [
       { label: 'About', href: '/about/' },
+      { label: 'Contribute', href: '/contribute/' },
       { label: 'Contact', href: '/contact/' },
-      { label: 'Write for us', href: '/contact/' },
-      { label: 'Newsletter', href: '/#newsletter' },
       { label: 'Privacy', href: '/privacy/' },
     ],
   },
@@ -49,15 +48,19 @@ export const footerColumns = [
   },
 ] as const;
 
-export const newsletter = {
-  heading: 'STEM reporting, straight to your inbox.',
-  body: 'Student-written stories on science, technology, engineering, and mathematics — sent when there is something worth reading, not on a schedule.',
-  note: 'Free. No fixed cadence, no partner sends. Unsubscribe in a click.',
-} as const;
-
-export const deskIndex = {
-  heading: 'The desk index',
-  blurb: 'Every desk, its story count, and the piece it is leading with right now.',
+/**
+ * The single call to action across the site.
+ *
+ * Catalyst has no newsletter, so the thing we actually want from a reader is a
+ * story lead: a project, a paper, or a question worth writing up.
+ */
+export const contribute = {
+  eyebrow: 'Get involved',
+  heading: 'Built something worth writing about?',
+  body: 'Catalyst is written by students. If you have a project, a paper, or a question you cannot stop thinking about, tell us about it — we will help you turn it into a story.',
+  cta: { label: 'Share a project', href: '/contribute/' },
+  /** Shorter label for the masthead, where horizontal space is tight. */
+  shortLabel: 'Share a project',
 } as const;
 
 /**

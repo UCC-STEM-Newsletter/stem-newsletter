@@ -1,20 +1,19 @@
 ---
-import { Image } from 'astro:assets';
-import type { Post } from '../lib/posts';
 import type { Category } from '../data/categories';
-import { railSizes, railWidths } from '../lib/images';
-import { rank } from '../lib/format';
+import { contribute } from '../data/site';
 
 /**
- * Off-canvas navigation for narrow viewports, including a drag-scrollable
- * "Popular now" rail.
+ * Off-canvas navigation for narrow viewports.
+ *
+ * Deliberately just navigation and the site's one call to action: with a small
+ * archive, a "popular now" rail in here would only repeat the newest stories a
+ * reader has already scrolled past.
  */
 interface Props {
   categories: Pick<Category, 'slug' | 'name'>[];
-  posts: Post[];
 }
 
-const { categories, posts } = Astro.props;
+const { categories } = Astro.props;
 const activeCategory = Astro.url.pathname.match(/^\/category\/([^/]+)\//)?.[1];
 ---
 
@@ -59,51 +58,21 @@ const activeCategory = Astro.url.pathname.match(/^\/category\/([^/]+)\//)?.[1];
     <nav aria-label="Publication pages">
       <p class="eyebrow mb-3 text-muted-foreground">Pages</p>
       <ul class="grid gap-2.5 text-sm">
-        <li><a href="/all-news/" class="story-link">All News</a></li>
+        <li><a href="/all-news/" class="story-link">All stories</a></li>
+        <li><a href="/authors/" class="story-link">Contributors</a></li>
         <li><a href="/about/" class="story-link">About</a></li>
         <li><a href="/contact/" class="story-link">Contact</a></li>
         <li><a href="/privacy/" class="story-link">Privacy</a></li>
       </ul>
     </nav>
 
-    <div class="grid gap-3">
-      <a href="/#newsletter" class="button-primary min-h-11 px-4 py-3 text-center text-sm font-semibold"
-        >Subscribe to the briefing</a
+    <div class="grid gap-3 pb-4">
+      <a
+        href={contribute.cta.href}
+        class="button-primary min-h-11 px-4 py-3 text-center text-sm font-semibold"
       >
-    </div>
-
-    <div class="min-w-0 pb-4">
-      <div class="mb-4 border-b border-border pb-3">
-        <h2 class="eyebrow text-muted-foreground">Popular now</h2>
-      </div>
-      <div class="mobile-menu-trending" data-drag-scroll>
-        {
-          posts.map((post, index) => (
-            <a
-              href={`/post/${post.id}/`}
-              class="story-tile mobile-menu-trending-card group shrink-0"
-            >
-              <Image
-                src={post.data.cover}
-                widths={railWidths}
-                sizes={railSizes}
-                alt={post.data.coverAlt}
-                loading="lazy"
-                decoding="async"
-                class="aspect-[16/10] w-full object-cover"
-              />
-              <span class="block p-3">
-                <span class="eyebrow text-primary">{rank(index)}</span>
-                <span
-                  class="story-headline mt-1.5 block font-display text-base leading-[1.16] font-bold text-balance"
-                >
-                  {post.data.title}
-                </span>
-              </span>
-            </a>
-          ))
-        }
-      </div>
+        {contribute.cta.label}
+      </a>
     </div>
   </div>
 </div>

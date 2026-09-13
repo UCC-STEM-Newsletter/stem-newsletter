@@ -1,27 +1,24 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { site } from '../data/site';
+import { contribute, site } from '../data/site';
 
 const cards = [
   {
     heading: 'Editorial',
-    body: 'Send story ideas, corrections, and publication questions.',
+    body: 'Corrections, questions about something we published, or a tip you would rather not write up yourself.',
     link: { label: site.editorialEmail, href: `mailto:${site.editorialEmail}` },
   },
   {
-    heading: 'Advertising',
-    body: 'Ask about sponsorships, display placements, newsletter inventory, and editorial partnerships.',
-    link: {
-      label: 'Advertise with us',
-      href: `mailto:${site.editorialEmail}?subject=Advertising inquiry`,
-    },
+    heading: 'Contribute',
+    body: 'Pitch a project, a piece of research, or a question worth chasing. No writing experience needed.',
+    link: { label: contribute.cta.label, href: contribute.cta.href },
   },
 ];
 ---
 
 <BaseLayout
   title={`Contact | ${site.name}`}
-  description="Contact the Catalyst editors with tips, corrections, and questions."
+  description="Contact the Catalyst editors with corrections, questions, or a story idea."
 >
   <section class="mx-auto max-w-4xl px-6 pt-12 lg:px-10">
     <p class="eyebrow text-primary">Contact</p>
@@ -29,8 +26,8 @@ const cards = [
       Get in touch
     </h1>
     <p class="mt-6 max-w-2xl text-pretty text-xl text-muted-foreground">
-      Use this page for editorial tips, partnerships, advertising, and general publication
-      inquiries.
+      Corrections, questions, and story ideas all land in the same inbox, and a person reads every
+      one.
     </p>
   </section>
 

@@ -1,6 +1,6 @@
 /**
- * Site chrome behaviour: sticky masthead, mobile drawer, drag-scrollable rails
- * and the header search dialog.
+ * Site chrome behaviour: the sticky masthead, the mobile drawer and the
+ * header search dialog.
  */
 
 const siteTopbar = document.querySelector('[data-site-topbar]');
@@ -123,54 +123,6 @@ if (mobileMenuButton && mobileMenuPanel) {
   });
 }
 
-// Click-and-drag scrolling for the mobile "Popular now" rail.
-document.querySelectorAll('[data-drag-scroll]').forEach((scroller) => {
-  let isDragging = false;
-  let didDrag = false;
-  let startX = 0;
-  let startScrollLeft = 0;
-
-  const stopDragging = () => {
-    if (!isDragging) return;
-    isDragging = false;
-    scroller.classList.remove('is-dragging');
-  };
-
-  scroller.addEventListener('pointerdown', (event) => {
-    if (event.pointerType !== 'mouse' || event.button !== 0) return;
-
-    isDragging = true;
-    didDrag = false;
-    startX = event.clientX;
-    startScrollLeft = scroller.scrollLeft;
-    scroller.classList.add('is-dragging');
-    scroller.setPointerCapture(event.pointerId);
-  });
-
-  scroller.addEventListener('pointermove', (event) => {
-    if (!isDragging) return;
-
-    const deltaX = event.clientX - startX;
-    if (Math.abs(deltaX) > 4) didDrag = true;
-    scroller.scrollLeft = startScrollLeft - deltaX;
-  });
-
-  scroller.addEventListener('pointerup', stopDragging);
-  scroller.addEventListener('pointercancel', stopDragging);
-  scroller.addEventListener('lostpointercapture', stopDragging);
-
-  scroller.addEventListener(
-    'click',
-    (event) => {
-      if (!didDrag) return;
-      event.preventDefault();
-      event.stopPropagation();
-      didDrag = false;
-    },
-    true,
-  );
-});
-
 const searchOverlay = document.querySelector('[data-site-search-overlay]');
 const searchToggles = Array.from(document.querySelectorAll('[data-site-search-toggle]'));
 
@@ -286,20 +238,18 @@ if (searchForms.length) {
     return posts
       .map((post) => {
         const haystack = normalize(
-          [post.title, post.excerpt, post.category, post.author, ...(post.tags || [])].join(' '),
+          [post.title, post.excerpt, post.category, post.author].join(' '),
         );
         if (!queryParts.every((part) => haystack.includes(part))) return null;
 
         const title = normalize(post.title);
         const category = normalize(post.category);
-        const tags = normalize((post.tags || []).join(' '));
         const excerpt = normalize(post.excerpt);
         let score = 0;
 
         if (title.includes(normalizedQuery)) score += 8;
         if (title.startsWith(normalizedQuery)) score += 4;
         if (category.includes(normalizedQuery)) score += 3;
-        if (tags.includes(normalizedQuery)) score += 3;
         if (excerpt.includes(normalizedQuery)) score += 2;
 
         score += queryParts.filter((part) => title.includes(part)).length * 2;

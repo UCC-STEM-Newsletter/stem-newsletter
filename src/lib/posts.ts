@@ -1,13 +1,6 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
-import { tagBySlug } from '../data/tags';
 
 export type Post = CollectionEntry<'posts'>;
-
-/** A tag paired with its display name, for rails and tag pages. */
-export interface TagRef {
-  slug: string;
-  name: string;
-}
 
 /**
  * Every story, newest first. Publication dates collide often, so the slug is
@@ -23,9 +16,6 @@ export const allPosts = async (): Promise<Post[]> => {
 
 export const postsByCategory = (posts: Post[], category: string) =>
   posts.filter((post) => post.data.category === category);
-
-export const postsByTag = (posts: Post[], tag: string) =>
-  posts.filter((post) => post.data.tags.includes(tag));
 
 export const postsByAuthor = (posts: Post[], author: string) =>
   posts.filter((post) => post.data.author === author);
@@ -66,21 +56,6 @@ export const readingTime = (post: Post): number => {
 
   const words = (post.body ?? '').trim().split(/\s+/).filter(Boolean).length;
   return Math.max(1, Math.round(words / WORDS_PER_MINUTE));
-};
-
-/**
- * Tags that at least one story actually carries, alphabetically by label.
- *
- * Deriving this from the archive rather than from the vocabulary means a tag
- * with no stories never appears in a rail and never links to a missing page.
- */
-export const usedTags = (posts: Post[]): TagRef[] => {
-  const seen = new Set<string>();
-  for (const post of posts) for (const slug of post.data.tags) seen.add(slug);
-
-  return [...seen]
-    .map((slug) => tagBySlug.get(slug) ?? { slug, name: slug })
-    .sort((a, b) => a.name.localeCompare(b.name));
 };
 
 /** Stories around `post` in the newest-first ordering. */

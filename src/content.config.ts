@@ -17,7 +17,6 @@ const posts = defineCollection({
       publishedAt: z.coerce.date(),
       /** Optional override; otherwise derived from the body word count. */
       readMinutes: z.number().int().positive().optional(),
-      tags: z.array(z.string()).default([]),
       cover: image(),
       coverAlt: z.string(),
       coverCredit: z

@@ -473,27 +473,6 @@ a:hover .category-chip:not(.category-chip-on-image) {
   color: var(--primary);
 }
 
-.hover-zoom img {
-  transition: transform 0.62s var(--ease-out);
-}
-
-.hover-zoom:hover img {
-  transform: scale(1.045);
-}
-
-.card-lift {
-  transition:
-    transform 0.26s var(--ease-out),
-    border-color 0.26s var(--ease-out),
-    box-shadow 0.26s var(--ease-out);
-}
-
-.card-lift:hover {
-  transform: translateY(-3px);
-  border-color: var(--border-strong);
-  box-shadow: var(--elev-md);
-}
-
 .icon-button {
   display: inline-grid;
   place-items: center;
@@ -532,32 +511,11 @@ a:hover .category-chip:not(.category-chip-on-image) {
   background: var(--border-strong);
 }
 
-/* ---------------------------------------------------------------- newsletter */
+/* ---------------------------------------------------------------- cta band */
 
-.newsletter {
+.cta-band {
   border-block: 1px solid var(--border);
   background: var(--background-wash);
-}
-
-.newsletter-input {
-  width: 100%;
-  min-height: 3rem;
-  padding: 0 1rem;
-  border: 1px solid var(--border-strong);
-  background: var(--background);
-  color: var(--foreground);
-  font: inherit;
-  font-size: 0.9375rem;
-  transition: border-color 0.2s var(--ease-out);
-}
-
-.newsletter-input::placeholder {
-  color: var(--muted-foreground);
-}
-
-.newsletter-input:focus {
-  border-color: var(--primary);
-  outline: 0;
 }
 
 .image-scrim {
@@ -992,58 +950,7 @@ html.has-open-menu .mobile-menu-label-close {
   cursor: pointer;
 }
 
-.mobile-menu-trending {
-  display: flex;
-  gap: 1rem;
-  padding-bottom: 0.25rem;
-  overflow-x: auto;
-  overscroll-behavior: contain;
-  cursor: grab;
-  scrollbar-width: none;
-  user-select: none;
-}
-
-.mobile-menu-trending.is-dragging {
-  cursor: grabbing;
-  scroll-behavior: auto;
-}
-
-.mobile-menu-trending.is-dragging a {
-  pointer-events: none;
-}
-
-.mobile-menu-trending::-webkit-scrollbar {
-  display: none;
-}
-
-.mobile-menu-trending-card {
-  width: min(72vw, 18rem);
-}
-
 /* -------------------------------------------------------------- animations */
-
-@keyframes marquee {
-  0% {
-    transform: translate(0);
-  }
-  to {
-    transform: translate(-50%);
-  }
-}
-
-.animate-marquee {
-  animation: 34s linear infinite marquee;
-}
-
-.animate-marquee:hover {
-  animation-play-state: paused;
-}
-
-@media (width <= 1023px) {
-  .animate-marquee {
-    animation-duration: 22s;
-  }
-}
 
 @keyframes pulse-dot {
   0%,

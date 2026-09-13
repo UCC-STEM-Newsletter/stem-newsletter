@@ -2,10 +2,10 @@
 /**
  * Content integrity check.
  *
- * Validates the story collection against the site's controlled vocabularies:
- * every desk, author and tag a story references must exist, covers must be on
- * disk, and the archives must not carry dead assets. Also prints an inventory
- * so you can see what the front page will actually render.
+ * Validates the story collection against the site's desks and masthead: every
+ * desk and author a story references must exist, covers must be on disk, and
+ * the archive must not carry dead assets. Also prints an inventory so you can
+ * see what the front page will actually render.
  *
  * Usage: node scripts/check-content.mjs
  */
@@ -15,7 +15,6 @@ import { fileURLToPath } from 'node:url';
 
 import { categories } from '../src/data/categories.ts';
 import { authors } from '../src/data/authors.ts';
-import { tags } from '../src/data/tags.ts';
 import { compositionFor } from '../src/data/homepage.ts';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -64,7 +63,6 @@ const parseFrontmatter = (raw) => {
 
 const categorySlugs = new Set(categories.map((category) => category.slug));
 const authorSlugs = new Set(authors.map((author) => author.slug));
-const tagSlugs = new Set(tags.map((tag) => tag.slug));
 
 const files = (await readdir(POSTS_DIR)).filter((file) => file.endsWith('.md')).sort();
 const stories = [];
@@ -89,11 +87,6 @@ for (const file of files) {
   if (data.author && !authorSlugs.has(data.author)) {
     fail(file, `unknown author "${data.author}" (known: ${[...authorSlugs].join(', ')})`);
   }
-  for (const tag of data.tags ?? []) {
-    if (!tagSlugs.has(tag)) {
-      fail(file, `unknown tag "${tag}" — add it to src/data/tags.ts first`);
-    }
-  }
   if (data.publishedAt && Number.isNaN(Date.parse(data.publishedAt))) {
     fail(file, `publishedAt "${data.publishedAt}" is not a parseable date`);
   }
@@ -117,7 +110,6 @@ for (const file of files) {
     slug: file.replace(/\.md$/, ''),
     category: data.category,
     author: data.author,
-    tags: data.tags ?? [],
     featured: data.featured === 'true',
     coverFile,
   });
@@ -149,8 +141,12 @@ for (const story of stories) {
 }
 
 console.log(`\nContent: ${stories.length} stories in ${path.relative(ROOT, POSTS_DIR)}/`);
-console.log(`Front page: tier ${plan.tier} — lead + ${plan.tiles} tiles + ${plan.latest} latest` +
-  `${plan.picks ? `, up to ${plan.picks} picks` : ''}, desks need ${plan.deskMinimum}+ stories\n`);
+console.log(
+  `Front page: tier ${plan.tier} — ${plan.splitBand ? 'lead + Latest rail' : 'full-width lead'}` +
+    `${plan.tiles ? ` + ${plan.tiles} tiles` : ''}` +
+    `${plan.picks ? `, up to ${plan.picks} picks` : ''}` +
+    `, desks need ${plan.deskMinimum}+ stories\n`,
+);
 
 console.log('Desks');
 for (const category of categories) {
@@ -164,13 +160,6 @@ console.log('\nAuthors');
 for (const author of authors) {
   const count = authorCounts.get(author.slug) ?? 0;
   console.log(`  ${author.name.padEnd(16)} ${String(count).padStart(2)} stories  ${count ? '' : '— no profile page'}`);
-}
-
-const usedTags = new Set(stories.flatMap((story) => story.tags));
-console.log(`\nTags: ${usedTags.size} of ${tags.length} vocabulary terms in use`);
-const unusedTags = tags.filter((tag) => !usedTags.has(tag.slug));
-if (unusedTags.length) {
-  console.log(`  not yet used (fine, no page is generated): ${unusedTags.map((t) => t.name).join(', ')}`);
 }
 
 // --- result ----------------------------------------------------------------

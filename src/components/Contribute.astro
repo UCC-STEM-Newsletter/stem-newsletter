@@ -1,0 +1,29 @@
+---
+import { contribute } from '../data/site';
+
+/**
+ * The site's one call to action, as a full-width band.
+ *
+ * Catalyst has no newsletter, so what we ask a reader for is a story lead —
+ * a project, a paper, or a question worth writing up.
+ */
+---
+
+<section class="cta-band" aria-labelledby="contribute-heading">
+  <div class="mx-auto max-w-xl px-6 py-14 text-center sm:py-16">
+    <p class="eyebrow text-primary">{contribute.eyebrow}</p>
+    <h2
+      id="contribute-heading"
+      class="mt-3 font-display text-2xl leading-[1.08] font-extrabold text-balance sm:text-[1.75rem]"
+    >
+      {contribute.heading}
+    </h2>
+    <p class="mt-3 text-pretty text-sm leading-6 text-muted-foreground">{contribute.body}</p>
+    <a
+      href={contribute.cta.href}
+      class="button-primary mt-7 inline-flex min-h-12 items-center px-6 text-sm font-semibold"
+    >
+      {contribute.cta.label}
+    </a>
+  </div>
+</section>

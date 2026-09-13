@@ -4,10 +4,6 @@ description: "A lab imaging technique could help drug researchers observe struct
 category: science
 author: rafael-stone
 publishedAt: 2026-06-10T00:00:00.000Z
-tags:
-  - research
-  - biotech
-  - imaging
 cover: ../../assets/covers/cover.D2mCuDwY.jpg
 coverAlt: "Cleanroom technicians working with lab samples and a tablet"
 coverCredit:
@@ -27,8 +23,6 @@ Seeing motion can reduce guesswork in early drug discovery and materials researc
 
 Expect more AI biology teams to pair models with richer experimental feedback.
 
-The editorial opportunity is to explain the operational details without losing the strategic thread. Readers should leave with a clearer sense of where the pressure is building, who has leverage, and which signals deserve attention next.
-
 ## The Bottom Line
 
-This is the kind of story Semnal is built to frame: practical, connected to real markets, and focused on the decisions technology leaders need to make next.
+The technique is promising; whether it becomes routine depends on how easily other labs can reproduce it.

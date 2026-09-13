@@ -30,10 +30,15 @@ const spotlight = total >= 5;
 const feature = posts[0];
 const rest = posts.slice(1);
 
+// Pick the column count that fills whole rows: 2 and 4 go two-up (4 becomes
+// four-up on wide screens), 3 goes three-up. Nothing is left orphaned on a row
+// of its own, and five or more earns the spotlight above instead.
 const gridClass =
-  total === 2
-    ? 'grid-cards col-rules-2 grid gap-x-8 gap-y-10 md:grid-cols-2'
-    : 'grid-cards col-rules-3 grid gap-x-8 gap-y-10 md:grid-cols-3';
+  total === 4
+    ? 'grid-cards col-rules-2-4 grid gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-4'
+    : total === 3
+      ? 'grid-cards col-rules-3 grid gap-x-8 gap-y-10 md:grid-cols-3'
+      : 'grid-cards col-rules-2 grid gap-x-8 gap-y-10 md:grid-cols-2';
 ---
 
 <section class="mx-auto max-w-7xl px-5 pt-20 sm:px-6 lg:px-10">

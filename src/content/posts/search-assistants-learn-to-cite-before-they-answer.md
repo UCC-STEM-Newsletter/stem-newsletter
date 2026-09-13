@@ -4,9 +4,6 @@ description: "Publishers and enterprise buyers are pushing AI search products to
 category: technology
 author: theo-grant
 publishedAt: 2026-06-21T00:00:00.000Z
-tags:
-  - artificial-intelligence
-  - computing
 cover: ../../assets/covers/cover.BuRhClQD.jpg
 coverAlt: "Humanoid robot wearing a conference badge"
 coverCredit:
@@ -26,8 +23,6 @@ Readers need to see why an answer exists, and publishers need traffic paths that
 
 The next interface fight will be over source prominence, not only answer quality.
 
-The editorial opportunity is to explain the operational details without losing the strategic thread. Readers should leave with a clearer sense of where the pressure is building, who has leverage, and which signals deserve attention next.
-
 ## The Bottom Line
 
-This is the kind of story Semnal is built to frame: practical, connected to real markets, and focused on the decisions technology leaders need to make next.
+A citation is only useful if a reader can follow it to something that genuinely says what was claimed.

@@ -8,19 +8,35 @@ import CategoryChip from './CategoryChip.astro';
 
 /**
  * Full-bleed lead card: photograph with a gradient scrim and the headline laid
- * over the bottom. Used for the homepage hero.
+ * over the bottom. Used for the homepage hero and for a desk's lead story.
  */
 interface Props {
   post: Post;
-  /** Border-radius/settle animation wrapper class. */
+  /**
+   * Stretch to the height of the surrounding grid row instead of holding a
+   * fixed aspect ratio. This is what keeps the homepage's hero and its side
+   * rail level: both are columns of one grid row, so the hero simply fills
+   * whatever height the rail needs. The image crops to fit.
+   */
+  fill?: boolean;
+  /** Overrides the frame classes; rarely needed. */
   frameClass?: string;
 }
 
-const { post, frameClass = 'aspect-square sm:aspect-[16/11]' } = Astro.props;
+const {
+  post,
+  fill = false,
+  frameClass = fill
+    ? 'aspect-square sm:aspect-[16/11] lg:aspect-auto lg:h-full'
+    : 'aspect-square sm:aspect-[16/11]',
+} = Astro.props;
 const author = authorBySlug.get(post.data.author);
 ---
 
-<a href={`/post/${post.id}/`} class="story-tile group relative block">
+<a
+  href={`/post/${post.id}/`}
+  class:list={['story-tile group relative block', fill && 'min-h-0 flex-1']}
+>
   <div class:list={['story-frame settle relative', frameClass]}>
     <Image
       src={post.data.cover}

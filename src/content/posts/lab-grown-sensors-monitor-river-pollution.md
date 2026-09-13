@@ -5,10 +5,6 @@ category: science
 author: rafael-stone
 publishedAt: 2026-07-07T00:00:00.000Z
 featured: true
-tags:
-  - research
-  - climate
-  - biotech
 cover: ../../assets/covers/cover.BpUeRAe-.jpg
 coverAlt: "Robotic laboratory arm processing samples in blue light"
 coverCredit:
@@ -28,8 +24,6 @@ Better local data can help cities spot problems before quarterly reports turn th
 
 The next challenge is standardizing readings so regulators can trust distributed sensors.
 
-The editorial opportunity is to explain the operational details without losing the strategic thread. Readers should leave with a clearer sense of where the pressure is building, who has leverage, and which signals deserve attention next.
-
 ## The Bottom Line
 
-This is the kind of story Semnal is built to frame: practical, connected to real markets, and focused on the decisions technology leaders need to make next.
+Cheap distributed sensing only matters if the readings can be trusted, and that is the part still being worked out.

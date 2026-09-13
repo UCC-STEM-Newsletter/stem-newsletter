@@ -6,19 +6,11 @@ import StoryTile from '../components/StoryTile.astro';
 import StoryMini from '../components/StoryMini.astro';
 import StoryRank from '../components/StoryRank.astro';
 import DeskSection from '../components/DeskSection.astro';
-import Newsletter from '../components/Newsletter.astro';
-import { site, deskIndex } from '../data/site';
-import {
-  compositionFor,
-  editorialBriefing,
-  picks,
-  PICKS_MINIMUM,
-  TOPIC_LIMIT,
-} from '../data/homepage';
+import Contribute from '../components/Contribute.astro';
+import { site } from '../data/site';
+import { compositionFor, picks, PICKS_MINIMUM } from '../data/homepage';
 import { categories } from '../data/categories';
-import { allPosts, leadPost, pickPosts, postsByCategory, takeUnused, usedTags } from '../lib/posts';
-import { formatDateShort } from '../lib/format';
-import { accentClass } from '../lib/accent';
+import { allPosts, leadPost, pickPosts, postsByCategory, takeUnused } from '../lib/posts';
 
 const posts = await allPosts();
 
@@ -26,9 +18,8 @@ const posts = await allPosts();
 // actually exists, so the same code serves six stories and two hundred.
 const plan = compositionFor(posts.length);
 
-// --- top of the page ---------------------------------------------------
-// Lead, supporting tiles and the Latest rail. `used` accumulates as we go so
-// no story appears twice in the same rail.
+// `used` accumulates as blocks claim stories, so nothing appears twice in the
+// same part of the page.
 const used = new Set<string>();
 
 const lead = leadPost(posts);
@@ -37,10 +28,9 @@ if (lead) used.add(lead.id);
 const tiles = takeUnused(posts, plan.tiles, used);
 for (const post of tiles) used.add(post.id);
 
-const latest = takeUnused(posts, plan.latest, used);
+const latest = plan.splitBand ? takeUnused(posts, plan.latest, used) : [];
 for (const post of latest) used.add(post.id);
 
-// --- editor's picks ----------------------------------------------------
 // A curated list minus anything already shown above. Skipped entirely when too
 // few picks survive, rather than rendering a stub chart.
 const picked = pickPosts(posts, picks)
@@ -49,104 +39,65 @@ const picked = pickPosts(posts, picks)
 const showPicks = picked.length >= PICKS_MINIMUM;
 if (showPicks) for (const post of picked) used.add(post.id);
 
-// --- desk blocks -------------------------------------------------------
 // A desk needs a couple of stories before it earns a section of its own.
 const desks = categories
   .map((category) => ({ category: category.slug, posts: postsByCategory(posts, category.slug) }))
   .filter((desk) => desk.posts.length >= plan.deskMinimum);
 
-// --- closing grid ------------------------------------------------------
 const remaining = posts.filter((post) => !used.has(post.id));
 const closing = plan.closing === 0 ? remaining : remaining.slice(0, plan.closing);
 // Tier A shows everything left; later tiers only bother with a full row.
 const showClosing = plan.closing === 0 ? closing.length > 0 : closing.length >= 4;
 
-// --- rails -------------------------------------------------------------
-const topics = usedTags(posts).slice(0, TOPIC_LIMIT);
-
-const deskRows = categories
-  .map((category) => {
-    const categoryPosts = postsByCategory(posts, category.slug);
-    return { category, count: categoryPosts.length, lead: categoryPosts[0] };
-  })
-  .filter((row) => row.count > 0);
+// With a split band the lead region is two columns of a single grid row.
+// Because grid items stretch, the hero fills whatever height the rail needs, so
+// the two columns end at the same edge without either side being tuned to fit.
+const split = plan.splitBand && latest.length > 0;
 ---
 
 <BaseLayout title={site.title} description={site.description} image="/og-image.png">
   <h1 class="sr-only">{site.title}</h1>
 
   <section class="mx-auto max-w-7xl px-5 pt-8 sm:px-6 lg:px-10">
-    <div class="grid gap-x-8 gap-y-12 lg:grid-cols-[minmax(0,1fr)_340px]">
-      <div class="opener space-y-10">
-        {lead && <StoryOverlay post={lead} />}
-        {
-          tiles.length > 0 && (
-            <div class="col-rules-2 grid gap-x-8 gap-y-10 md:grid-cols-2">
-              {tiles.map((post) => (
-                <StoryTile post={post} loading="eager" />
+    <div
+      class:list={[
+        'opener grid gap-x-8',
+        split ? 'gap-y-12 lg:grid-cols-[minmax(0,1fr)_340px]' : 'gap-y-0',
+      ]}
+    >
+      <div class="flex min-w-0 flex-col">
+        {lead && <StoryOverlay post={lead} fill={split} />}
+      </div>
+
+      {
+        split && (
+          <div class="flex flex-col lg:border-l lg:border-border lg:pl-8">
+            <div class="rule-top pt-3">
+              <div class="mb-1 flex items-baseline justify-between gap-4">
+                <h2 class="font-display text-xl font-extrabold">Latest</h2>
+                <span class="eyebrow text-primary animate-pulse-dot">Live</span>
+              </div>
+              {latest.map((post) => (
+                <StoryMini post={post} />
               ))}
             </div>
-          )
-        }
-      </div>
-
-      <div class="opener space-y-10 lg:border-l lg:border-border lg:pl-8">
-        {
-          latest.length > 0 && (
-            <aside>
-              <div class="rule-top pt-3">
-                <div class="mb-1 flex items-baseline justify-between gap-4">
-                  <h2 class="font-display text-xl font-extrabold">Latest</h2>
-                  <span class="eyebrow text-primary animate-pulse-dot">Live</span>
-                </div>
-                {latest.map((post) => (
-                  <StoryMini post={post} />
-                ))}
-              </div>
-            </aside>
-          )
-        }
-
-        <aside class="rule-top flex flex-col pt-3">
-          <p class="eyebrow text-primary">{editorialBriefing.eyebrow}</p>
-          <p class="mt-3 font-display text-xl leading-[1.1] font-bold text-balance">
-            {editorialBriefing.heading}
-          </p>
-          <p class="mt-3 text-pretty text-sm leading-6 text-muted-foreground">
-            {editorialBriefing.body}
-          </p>
-          <a
-            href={editorialBriefing.cta.href}
-            class="button-primary mt-5 inline-flex min-h-11 items-center justify-center px-5 text-sm font-semibold"
-          >
-            {editorialBriefing.cta.label}
-          </a>
-        </aside>
-
-        {
-          topics.length > 0 && (
-            <nav class="rule-top pt-3" aria-labelledby="home-topics-heading">
-              <p id="home-topics-heading" class="eyebrow text-muted-foreground">
-                Topics in play
-              </p>
-              <ul class="mt-4 flex flex-wrap gap-2">
-                {topics.map((tag) => (
-                  <li>
-                    <a
-                      href={`/tag/${tag.slug}/`}
-                      class="button-quiet inline-flex min-h-8 items-center px-2.5 font-mono text-[10px] tracking-[0.16em] uppercase"
-                    >
-                      {tag.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          )
-        }
-      </div>
+          </div>
+        )
+      }
     </div>
   </section>
+
+  {
+    tiles.length > 0 && (
+      <section class="mx-auto max-w-7xl px-5 pt-14 sm:px-6 lg:px-10">
+        <div class="grid-cards col-rules-3 grid gap-x-8 gap-y-10 md:grid-cols-3">
+          {tiles.map((post) => (
+            <StoryTile post={post} />
+          ))}
+        </div>
+      </section>
+    )
+  }
 
   {
     showPicks && (
@@ -171,54 +122,8 @@ const deskRows = categories
 
   {desks.map((desk) => <DeskSection category={desk.category} posts={desk.posts} />)}
 
-  {
-    deskRows.length > 1 && (
-      <div class="reveal pt-20">
-        <section
-          class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-10"
-          aria-labelledby="desk-index-heading"
-        >
-          <SectionHeading
-            heading={deskIndex.heading}
-            blurb={deskIndex.blurb}
-            headingId="desk-index-heading"
-            actionLabel="All stories"
-            actionHref="/all-news/"
-          />
-          <ul class="grid-cards col-rules-3 grid gap-x-8 md:grid-cols-3">
-            {deskRows.map((row) => (
-              <li class="border-t border-border py-4">
-                <div class="flex items-baseline justify-between gap-3">
-                  <a
-                    href={`/category/${row.category.slug}/`}
-                    class={`eyebrow story-link ${accentClass(row.category.accent)}`}
-                  >
-                    {row.category.name}
-                  </a>
-                  <span class="font-mono text-[11px] text-muted-foreground">
-                    {String(row.count).padStart(2, '0')}
-                  </span>
-                </div>
-                {row.lead && (
-                  <a href={`/post/${row.lead.id}/`} class="story-tile group mt-2.5 block">
-                    <p class="story-headline font-display text-base leading-[1.16] font-bold text-balance">
-                      {row.lead.data.title}
-                    </p>
-                    <p class="mt-2 font-mono text-[11px] text-muted-foreground">
-                      {formatDateShort(row.lead.data.publishedAt)}
-                    </p>
-                  </a>
-                )}
-              </li>
-            ))}
-          </ul>
-        </section>
-      </div>
-    )
-  }
-
   <section class="reveal mt-24"></section>
-  <Newsletter id="newsletter" />
+  <Contribute />
 
   {
     showClosing && (

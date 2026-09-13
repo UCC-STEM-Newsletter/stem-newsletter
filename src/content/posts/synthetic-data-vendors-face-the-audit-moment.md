@@ -4,9 +4,6 @@ description: "Buyers want proof that generated datasets improve model behavior w
 category: technology
 author: theo-grant
 publishedAt: 2026-06-30T00:00:00.000Z
-tags:
-  - artificial-intelligence
-  - data
 cover: ../../assets/covers/cover.DP-2Il3R.jpg
 coverAlt: "Humanoid robot with a blue lanyard and badge"
 coverCredit:
@@ -26,8 +23,6 @@ The strongest vendors can explain provenance, coverage gaps, and failure modes i
 
 Expect evaluation reports to become part of standard AI procurement packets.
 
-The editorial opportunity is to explain the operational details without losing the strategic thread. Readers should leave with a clearer sense of where the pressure is building, who has leverage, and which signals deserve attention next.
-
 ## The Bottom Line
 
-This is the kind of story Semnal is built to frame: practical, connected to real markets, and focused on the decisions technology leaders need to make next.
+Provenance is becoming the first question buyers ask and the hardest one to answer well.

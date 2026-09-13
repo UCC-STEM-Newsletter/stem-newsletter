@@ -13,7 +13,17 @@ export type Tier = 'A' | 'B' | 'C';
 
 export interface Composition {
   tier: Tier;
-  /** Supporting tiles under the lead. */
+  /**
+   * Whether the lead region splits into a hero and a side rail.
+   *
+   * The two columns of a split region share one grid row, so they always end at
+   * the same edge: the hero stretches to fill whatever height the rail needs.
+   * That is what keeps the region level, rather than matching item counts by
+   * hand. With only a story or two there is nothing to put in a rail, so the
+   * lead simply spans the full width.
+   */
+  splitBand: boolean;
+  /** Supporting tiles in their own full-width row beneath the lead region. */
   tiles: number;
   /** Items in the "Latest" rail beside the lead. */
   latest: number;
@@ -38,6 +48,9 @@ export interface Composition {
 const TIER_C_FROM = 20;
 const TIER_B_FROM = 7;
 
+/** Below this there is nothing meaningful to put beside the lead. */
+const SPLIT_BAND_FROM = 5;
+
 export const tierFor = (count: number): Tier => {
   if (count >= TIER_C_FROM) return 'C';
   if (count >= TIER_B_FROM) return 'B';
@@ -52,21 +65,17 @@ export const tierFor = (count: number): Tier => {
  */
 export const compositionFor = (count: number): Composition => {
   const tier = tierFor(count);
+  const splitBand = count >= SPLIT_BAND_FROM;
 
   if (tier === 'C') {
-    return { tier, tiles: 4, latest: 5, picks: 6, deskMinimum: 2, closing: 8 };
+    return { tier, splitBand, tiles: 3, latest: 5, picks: 6, deskMinimum: 2, closing: 8 };
   }
   if (tier === 'B') {
-    return { tier, tiles: 3, latest: 4, picks: 6, deskMinimum: 2, closing: 8 };
+    return { tier, splitBand, tiles: 3, latest: 4, picks: 6, deskMinimum: 2, closing: 8 };
   }
-  return { tier, tiles: 0, latest: 0, picks: 0, deskMinimum: 1, closing: 0 };
+  return { tier, splitBand, tiles: 3, latest: 2, picks: 0, deskMinimum: 1, closing: 0 };
 };
 
-/**
- * Curated "Editor's picks", newest-interesting-first. Picks already shown in
- * the lead, tiles or Latest rail are skipped, and the block only renders when
- * at least `PICKS_MINIMUM` survive.
- */
 /**
  * Curated "Editor's picks", best first.
  *
@@ -86,17 +95,3 @@ export const picks = [
 ] as const;
 
 export const PICKS_MINIMUM = 3;
-
-/** Stories offered in the headline ticker beneath the masthead. */
-export const TICKER_LIMIT = 6;
-
-/** Tags surfaced in the "Topics in play" rail. */
-export const TOPIC_LIMIT = 12;
-
-/** Copy for the promo panel in the top-right column. */
-export const editorialBriefing = {
-  eyebrow: 'From the editors',
-  heading: 'One story worth your time.',
-  body: 'Catalyst publishes when there is something worth saying — a single piece explained properly, rather than a feed to keep up with.',
-  cta: { label: 'Read the archive', href: '/all-news/' },
-} as const;

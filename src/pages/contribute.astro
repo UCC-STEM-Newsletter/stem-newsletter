@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { contribute, site } from '../data/site';
+
+/**
+ * The destination for the site's call to action. Catalyst has no newsletter, so
+ * this is what we actually ask a reader for: a story lead.
+ */
+
+const looking = [
+  {
+    heading: 'A project you built',
+    body: 'Something you made for a class, a club, or because you wanted to see if you could — hardware, software, a model, an experiment.',
+  },
+  {
+    heading: 'Research or coursework',
+    body: 'A paper, a lab result, a dataset, or a piece of maths you found genuinely surprising. We will help you explain it to someone outside the room.',
+  },
+  {
+    heading: 'A question you are stuck on',
+    body: 'You do not need an answer to pitch. Some of the best pieces start with something none of us could explain yet.',
+  },
+];
+
+const sending = [
+  'A few sentences on what it is and why it is interesting.',
+  'A link, a photo, a diagram, or a repository — whatever exists.',
+  'How you would like to be credited.',
+];
+---
+
+<BaseLayout
+  title={`${contribute.cta.label} | ${site.name}`}
+  description="Pitch a story to Catalyst. We are looking for student projects, research, and questions worth writing up."
+>
+  <section class="mx-auto max-w-4xl px-6 pt-12 lg:px-10">
+    <p class="eyebrow text-primary">{contribute.eyebrow}</p>
+    <h1 class="mt-3 font-display text-5xl leading-[0.95] font-extrabold md:text-7xl">
+      Share a project
+    </h1>
+    <p class="mt-6 max-w-2xl text-pretty text-xl leading-relaxed text-muted-foreground">
+      {contribute.body}
+    </p>
+  </section>
+
+  <section class="mx-auto grid max-w-4xl gap-10 px-6 pt-14 lg:px-10">
+    {
+      looking.map((item) => (
+        <div class="border-t border-border pt-8">
+          <h2 class="font-display text-3xl font-bold tracking-tight">{item.heading}</h2>
+          <p class="mt-4 text-pretty leading-7 text-muted-foreground">{item.body}</p>
+        </div>
+      ))
+    }
+
+    <div class="border-t border-border pt-8">
+      <h2 class="font-display text-3xl font-bold tracking-tight">What to send</h2>
+      <ul class="mt-4 space-y-2.5 leading-7 text-muted-foreground">
+        {sending.map((line) => <li class="flex gap-3"><span aria-hidden="true">—</span>{line}</li>)}
+      </ul>
+      <p class="mt-6 text-pretty leading-7 text-muted-foreground">
+        You do not need any writing experience. If the idea is good, we will work on the words
+        together — that is what editing is for.
+      </p>
+    </div>
+
+    <div class="cta-band mx-auto w-full max-w-none px-6 py-14 text-center sm:py-16">
+      <h2 class="font-display text-2xl leading-[1.08] font-extrabold text-balance sm:text-[1.75rem]">
+        Got something in mind?
+      </h2>
+      <p class="mt-3 text-pretty text-sm leading-6 text-muted-foreground">
+        Send it over. A paragraph is enough to start.
+      </p>
+      <a
+        href={`mailto:${site.editorialEmail}?subject=Story%20idea%20for%20Catalyst`}
+        class="button-primary mt-7 inline-flex min-h-12 items-center px-6 text-sm font-semibold"
+      >
+        {site.editorialEmail}
+      </a>
+    </div>
+  </section>
+</BaseLayout>

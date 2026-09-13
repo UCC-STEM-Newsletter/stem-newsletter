@@ -4,9 +4,6 @@ description: "The latest model race is less about benchmark shock and more about
 category: technology
 author: theo-grant
 publishedAt: 2026-07-06T00:00:00.000Z
-tags:
-  - artificial-intelligence
-  - computing
 cover: ../../assets/covers/cover.DOyprhCN.jpg
 coverAlt: "Laptop showing a responsible AI writing website"
 coverCredit:
@@ -26,8 +23,6 @@ Teams are tuning routers, caches, and smaller specialist models before renting a
 
 The winners may look less like model labs and more like systems companies.
 
-The editorial opportunity is to explain the operational details without losing the strategic thread. Readers should leave with a clearer sense of where the pressure is building, who has leverage, and which signals deserve attention next.
-
 ## The Bottom Line
 
-This is the kind of story Semnal is built to frame: practical, connected to real markets, and focused on the decisions technology leaders need to make next.
+Efficiency claims are easy to make and hard to check; the electricity bill is the honest scoreboard.

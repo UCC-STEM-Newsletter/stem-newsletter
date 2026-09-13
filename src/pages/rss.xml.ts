@@ -21,7 +21,7 @@ export async function GET(context: APIContext) {
       guid: `/post/${post.id}/`,
       pubDate: post.data.publishedAt,
       description: post.data.description,
-      categories: [post.data.category, ...post.data.tags],
+      categories: [post.data.category],
       author: post.data.author,
     })),
   });

@@ -4,9 +4,6 @@ description: "Researchers are testing alloys that could endure harsher reactor c
 category: engineering
 author: rafael-stone
 publishedAt: 2026-06-30T00:00:00.000Z
-tags:
-  - energy
-  - materials
 cover: ../../assets/covers/cover.CDVQYjmC.jpg
 coverAlt: "Scientist looking through a microscope in a laboratory"
 coverCredit:
@@ -26,8 +23,6 @@ Longer component life can change the economics of future demonstration plants.
 
 Durability milestones deserve as much attention as peak performance claims.
 
-The editorial opportunity is to explain the operational details without losing the strategic thread. Readers should leave with a clearer sense of where the pressure is building, who has leverage, and which signals deserve attention next.
-
 ## The Bottom Line
 
-This is the kind of story Semnal is built to frame: practical, connected to real markets, and focused on the decisions technology leaders need to make next.
+Materials work is slow and rarely photogenic, which is exactly why it is worth watching.

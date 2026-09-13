@@ -45,20 +45,18 @@ if (searchPageForm && searchPageInput && searchPageResults && searchPageSummary)
     return posts
       .map((post) => {
         const haystack = normalize(
-          [post.title, post.excerpt, post.category, post.author, ...(post.tags || [])].join(' '),
+          [post.title, post.excerpt, post.category, post.author].join(' '),
         );
         if (!queryParts.every((part) => haystack.includes(part))) return null;
 
         const title = normalize(post.title);
         const category = normalize(post.category);
-        const tags = normalize((post.tags || []).join(' '));
         const excerpt = normalize(post.excerpt);
         let score = 0;
 
         if (title.includes(normalizedQuery)) score += 8;
         if (title.startsWith(normalizedQuery)) score += 4;
         if (category.includes(normalizedQuery)) score += 3;
-        if (tags.includes(normalizedQuery)) score += 3;
         if (excerpt.includes(normalizedQuery)) score += 2;
 
         score += queryParts.filter((part) => title.includes(part)).length * 2;

@@ -4,9 +4,6 @@ description: "AI teams are turning large-model behavior into smaller systems tha
 category: technology
 author: theo-grant
 publishedAt: 2026-06-19T00:00:00.000Z
-tags:
-  - artificial-intelligence
-  - computing
 cover: ../../assets/covers/cover.DAXtw1cX.jpg
 coverAlt: "Blue microchip mounted on a detailed electronic circuit board"
 coverCredit:

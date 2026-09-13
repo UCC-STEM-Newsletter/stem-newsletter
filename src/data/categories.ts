@@ -1,6 +1,6 @@
 /**
- * The four STEM desks, in the order they appear in the navigation, the footer,
- * the desk index and the homepage.
+ * The four STEM desks, in the order they appear in the navigation, the footer
+ * and the homepage.
  *
  * A desk only gets a homepage block once it has at least two stories, and an
  * empty desk renders an explicit "no stories yet" state rather than a bare
