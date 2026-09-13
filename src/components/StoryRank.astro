@@ -2,6 +2,7 @@
 import { readingTime, type Post } from '../lib/posts';
 import { formatDateShort, rank } from '../lib/format';
 import CategoryChip from './CategoryChip.astro';
+import { withBase } from '../lib/url';
 
 /**
  * Numbered entry for the "Most read" chart. No image — the rank carries the
@@ -16,7 +17,7 @@ const { post, index } = Astro.props;
 ---
 
 <a
-  href={`/post/${post.id}/`}
+  href={withBase(`/post/${post.id}/`)}
   class="story-tile group grid min-h-32 grid-cols-[3.25rem_minmax(0,1fr)] gap-5 border-t border-border pt-4 pb-6 sm:grid-cols-[3.75rem_minmax(0,1fr)]"
 >
   <span

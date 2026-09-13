@@ -3,6 +3,7 @@ import { categories } from '../data/categories';
 import { authorBySlug } from '../data/authors';
 import { allPosts, readingTime } from '../lib/posts';
 import { formatDateShort } from '../lib/format';
+import { withBase } from '../lib/url';
 
 /**
  * `/search-index.json` — the client-side search corpus. Shipped as a static
@@ -22,7 +23,7 @@ export async function GET(_context: APIContext) {
       date: post.data.publishedAt.toISOString(),
       dateLabel: formatDateShort(post.data.publishedAt),
       readMinutes: readingTime(post),
-      href: `/post/${post.id}/`,
+      href: withBase(`/post/${post.id}/`),
       image: {
         src: post.data.cover.src,
         width: post.data.cover.width,

@@ -220,7 +220,7 @@ if (searchForms.length) {
       .replace(/[\u0300-\u036f]/g, '');
 
   const getSearchIndex = () => {
-    searchIndexPromise ??= fetch('/search-index.json')
+    searchIndexPromise ??= fetch(`${import.meta.env.BASE_URL}search-index.json`)
       .then((response) => {
         if (!response.ok) throw new Error('Search index unavailable');
         return response.json();
@@ -275,7 +275,7 @@ if (searchForms.length) {
     panel.innerHTML = `
         <div class="site-search-panel-heading">
           <span>Results</span>
-          <a href="/search/?q=${encodeURIComponent(query)}">View all</a>
+          <a href="${import.meta.env.BASE_URL}search/?q=${encodeURIComponent(query)}">View all</a>
         </div>
         <div class="site-search-results">
           ${posts

@@ -4,6 +4,7 @@ import { site } from '../../data/site';
 import { authors } from '../../data/authors';
 import { allPosts, postsByAuthor } from '../../lib/posts';
 import { pluralize } from '../../lib/format';
+import { withBase } from '../../lib/url';
 
 /** Contributors index: `/authors/` */
 
@@ -36,7 +37,7 @@ const rows = authors
       {
         rows.map(({ author, count }) => (
           <a
-            href={`/author/${author.slug}/`}
+            href={withBase(`/author/${author.slug}/`)}
             class="story-tile group block rule-top pt-4"
           >
             <span class="flex items-center gap-4">

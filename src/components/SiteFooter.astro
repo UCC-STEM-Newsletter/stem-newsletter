@@ -1,6 +1,7 @@
 ---
 import { site, footerColumns } from '../data/site';
 import { categories } from '../data/categories';
+import { withBase } from '../lib/url';
 ---
 
 <footer class="newsroom-footer mt-28 bg-surface">
@@ -9,7 +10,7 @@ import { categories } from '../data/categories';
   >
     <div>
       <a
-        href="/"
+        href={withBase('/')}
         class="font-display text-3xl leading-none font-extrabold tracking-[-0.045em]"
         aria-label="Catalyst home">Catalyst</a
       >
@@ -22,7 +23,7 @@ import { categories } from '../data/categories';
         {
           categories.map((category) => (
             <li>
-              <a href={`/category/${category.slug}/`} class="story-link">
+              <a href={withBase(`/category/${category.slug}/`)} class="story-link">
                 {category.name}
               </a>
             </li>
@@ -38,7 +39,7 @@ import { categories } from '../data/categories';
           <ul class="mt-4 space-y-2 text-sm">
             {column.links.map((link) => (
               <li>
-                <a href={link.href} class="story-link">
+                <a href={withBase(link.href)} class="story-link">
                   {link.label}
                 </a>
               </li>

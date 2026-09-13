@@ -1,4 +1,6 @@
 ---
+import { withBase } from '../lib/url';
+
 /**
  * Section masthead: a heavy rule, a display heading, a supporting line and an
  * optional quiet action on the right.
@@ -28,7 +30,7 @@ const { heading, blurb, headingId, actionLabel, actionHref } = Astro.props;
   {
     actionLabel && actionHref && (
       <a
-        href={actionHref}
+        href={withBase(actionHref)}
         class="button-quiet inline-flex min-h-9 items-center px-3.5 font-mono text-[10px] font-semibold tracking-[0.22em] uppercase"
       >
         {actionLabel}

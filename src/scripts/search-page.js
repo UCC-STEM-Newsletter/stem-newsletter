@@ -27,7 +27,7 @@ if (searchPageForm && searchPageInput && searchPageResults && searchPageSummary)
       .replace(/[\u0300-\u036f]/g, '');
 
   const getSearchIndex = () => {
-    searchIndexPromise ??= fetch('/search-index.json')
+    searchIndexPromise ??= fetch(`${import.meta.env.BASE_URL}search-index.json`)
       .then((response) => {
         if (!response.ok) throw new Error('Search index unavailable');
         return response.json();

@@ -5,6 +5,7 @@ import { articleSizes } from '../lib/images';
 import StoryFeature from './StoryFeature.astro';
 import StoryMini from './StoryMini.astro';
 import StoryTile from './StoryTile.astro';
+import { withBase } from '../lib/url';
 
 /**
  * A desk's homepage block.
@@ -58,7 +59,7 @@ const gridClass =
           {count} {total === 1 ? 'story' : 'stories'}
         </span>
         <a
-          href={`/category/${category}/`}
+          href={withBase(`/category/${category}/`)}
           class="button-quiet inline-flex min-h-9 items-center px-3.5 font-mono text-[10px] font-semibold tracking-[0.22em] uppercase"
         >
           See all

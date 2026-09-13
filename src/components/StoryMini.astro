@@ -4,6 +4,7 @@ import { readingTime, type Post } from '../lib/posts';
 import { formatDateShort } from '../lib/format';
 import { thumbSize } from '../lib/images';
 import CategoryChip from './CategoryChip.astro';
+import { withBase } from '../lib/url';
 
 /**
  * Compact horizontal row with a square thumbnail. Used by the "Latest",
@@ -18,7 +19,7 @@ const { post, loading = 'eager' } = Astro.props;
 ---
 
 <a
-  href={`/post/${post.id}/`}
+  href={withBase(`/post/${post.id}/`)}
   class="story-tile group grid grid-cols-[84px_minmax(0,1fr)] items-start gap-4 border-b border-border py-4 last:border-b-0 sm:grid-cols-[104px_minmax(0,1fr)]"
 >
   <div class="story-frame aspect-square">

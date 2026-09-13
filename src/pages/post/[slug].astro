@@ -14,6 +14,7 @@ import { authorBySlug } from '../../data/authors';
 import { allPosts, adjacentPosts, postsByCategory, readingTime } from '../../lib/posts';
 import { formatDate, isoDate } from '../../lib/format';
 import { leadWidths, articleSizes } from '../../lib/images';
+import { withBase } from '../../lib/url';
 
 /** Story page: `/post/<slug>/` */
 
@@ -39,7 +40,7 @@ const { post, previous, next, related } = Astro.props;
 const { Content, headings } = await render(post);
 const author = authorBySlug.get(post.data.author);
 const toc = headings.filter((heading) => heading.depth === 2);
-const canonical = new URL(`/post/${post.id}/`, Astro.site);
+const canonical = new URL(withBase(`/post/${post.id}/`), Astro.site);
 const coverUrl = new URL(post.data.cover.src, Astro.site);
 ---
 
@@ -87,7 +88,7 @@ const coverUrl = new URL(post.data.cover.src, Astro.site);
         >
           <span class="inline-flex min-w-0 items-center gap-1.5 text-muted-foreground">
             <Lucide name="user" class="h-3 w-3" />By <a
-              href={`/author/${post.data.author}/`}
+              href={withBase(`/author/${post.data.author}/`)}
               class="story-link text-foreground hover:text-primary">{author?.name ?? post.data.author}</a
             >
           </span>
@@ -147,7 +148,7 @@ const coverUrl = new URL(post.data.cover.src, Astro.site);
                 categories.map((category) => (
                   <li>
                     <a
-                      href={`/category/${category.slug}/`}
+                      href={withBase(`/category/${category.slug}/`)}
                       class:list={[
                         'story-link',
                         category.slug === post.data.category
@@ -203,7 +204,7 @@ const coverUrl = new URL(post.data.cover.src, Astro.site);
           <div>
             {
               previous && (
-                <a href={`/post/${previous.id}/`} class="story-tile group block">
+                <a href={withBase(`/post/${previous.id}/`)} class="story-tile group block">
                   <span class="eyebrow text-muted-foreground">Previous</span>
                   <span class="story-headline mt-2.5 block font-display text-xl leading-[1.14] font-bold text-balance">
                     {previous.data.title}
@@ -215,7 +216,7 @@ const coverUrl = new URL(post.data.cover.src, Astro.site);
           <div class="sm:border-l sm:border-border sm:pl-8">
             {
               next && (
-                <a href={`/post/${next.id}/`} class="story-tile group block">
+                <a href={withBase(`/post/${next.id}/`)} class="story-tile group block">
                   <span class="eyebrow text-muted-foreground">Next</span>
                   <span class="story-headline mt-2.5 block font-display text-xl leading-[1.14] font-bold text-balance">
                     {next.data.title}
@@ -244,7 +245,7 @@ const coverUrl = new URL(post.data.cover.src, Astro.site);
             </p>
           </div>
           <a
-            href="/all-news/"
+            href={withBase('/all-news/')}
             class="button-quiet inline-flex min-h-9 items-center px-3.5 font-mono text-[10px] font-semibold tracking-[0.22em] uppercase"
           >
             All stories

@@ -1,6 +1,7 @@
 ---
 import { categoryBySlug } from '../data/categories';
 import { accentClass } from '../lib/accent';
+import { withBase } from '../lib/url';
 
 /**
  * Desk label. Renders as a link on story pages and as a plain span inside
@@ -32,7 +33,7 @@ const classes = [
 
 {
   href ? (
-    <a href={href} class={classes}>
+    <a href={withBase(href)} class={classes}>
       {label}
     </a>
   ) : (

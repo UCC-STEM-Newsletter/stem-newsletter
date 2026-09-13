@@ -1,6 +1,7 @@
 ---
 import Icon from './Icon.astro';
 import Lucide from './Lucide.astro';
+import { withBase } from '../lib/url';
 
 /**
  * Search overlay. Results are rendered client-side from `/search-index.json`
@@ -33,7 +34,7 @@ import Lucide from './Lucide.astro';
         <Icon name="close" class="h-4 w-4" />
       </button>
     </div>
-    <form action="/search/" method="get" role="search" class="site-search" data-site-search-form>
+    <form action={withBase('/search/')} method="get" role="search" class="site-search" data-site-search-form>
       <label for="site-search-dialog-input" class="sr-only">Search Catalyst stories</label>
       <div class="site-search-field site-search-dialog-field">
         <Lucide name="search" class="h-5 w-5 text-muted-foreground" />

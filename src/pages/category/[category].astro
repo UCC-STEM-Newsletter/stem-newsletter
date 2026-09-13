@@ -8,6 +8,7 @@ import { site } from '../../data/site';
 import { categories, categoryBySlug } from '../../data/categories';
 import { allPosts, postsByCategory } from '../../lib/posts';
 import { pluralize } from '../../lib/format';
+import { withBase } from '../../lib/url';
 
 /** A desk's front page: `/category/ai-frontier/` … */
 
@@ -71,7 +72,7 @@ const [lead, ...rest] = posts;
                 rest of the archive is worth a look.
               </p>
               <a
-                href="/all-news/"
+                href={withBase('/all-news/')}
                 class="button-quiet mt-5 inline-flex min-h-10 items-center px-4 text-sm font-semibold"
               >
                 Browse all stories

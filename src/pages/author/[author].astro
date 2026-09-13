@@ -6,6 +6,7 @@ import { site } from '../../data/site';
 import { authors } from '../../data/authors';
 import { allPosts, postsByAuthor } from '../../lib/posts';
 import { pluralize } from '../../lib/format';
+import { withBase } from '../../lib/url';
 
 /** Author profile: `/author/rafael-stone/` … */
 
@@ -67,7 +68,7 @@ const name = meta?.name ?? author;
       <h2 class="font-display text-2xl font-bold tracking-tight md:text-3xl">
         Latest by {name}
       </h2>
-      <a href="/authors/" class="story-link text-sm text-muted-foreground hover:text-foreground">
+      <a href={withBase('/authors/')} class="story-link text-sm text-muted-foreground hover:text-foreground">
         All authors
       </a>
     </div>

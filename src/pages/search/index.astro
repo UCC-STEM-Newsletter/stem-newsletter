@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Lucide from '../../components/Lucide.astro';
 import { site } from '../../data/site';
+import { withBase } from '../../lib/url';
 
 /**
  * Search desk. Results are rendered client-side from `/search-index.json`
@@ -27,7 +28,7 @@ import { site } from '../../data/site';
     </div>
 
     <form
-      action="/search/"
+      action={withBase('/search/')}
       method="get"
       role="search"
       class="mt-8"

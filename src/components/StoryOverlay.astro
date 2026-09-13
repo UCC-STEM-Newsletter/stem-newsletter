@@ -5,6 +5,7 @@ import { leadSizes, leadWidths } from '../lib/images';
 import { formatDateShort } from '../lib/format';
 import { authorBySlug } from '../data/authors';
 import CategoryChip from './CategoryChip.astro';
+import { withBase } from '../lib/url';
 
 /**
  * Full-bleed lead card: photograph with a gradient scrim and the headline laid
@@ -39,7 +40,7 @@ const author = authorBySlug.get(post.data.author);
 ---
 
 <a
-  href={`/post/${post.id}/`}
+  href={withBase(`/post/${post.id}/`)}
   class:list={['story-tile group relative block', fill && 'min-h-0 flex-1']}
 >
   <div class:list={['story-frame settle relative', frameClass]}>

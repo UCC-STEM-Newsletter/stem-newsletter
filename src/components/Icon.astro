@@ -8,8 +8,13 @@ interface Props {
   class?: string;
 }
 
+import { withBase } from '../lib/url';
+
 const { name, class: className = 'h-4 w-4' } = Astro.props;
 ---
 
-<span class={`icon ${className}`} style={`--icon: url('/icons/${name}.svg')`} aria-hidden="true"
+<span
+  class={`icon ${className}`}
+  style={`--icon: url('${withBase(`/icons/${name}.svg`)}')`}
+  aria-hidden="true"
 ></span>

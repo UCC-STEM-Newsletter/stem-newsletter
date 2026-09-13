@@ -1,6 +1,8 @@
 ---
 import type { Category } from '../data/categories';
 import { contribute } from '../data/site';
+import Icon from './Icon.astro';
+import { withBase } from '../lib/url';
 
 /**
  * Off-canvas navigation for narrow viewports.
@@ -21,7 +23,7 @@ const activeCategory = Astro.url.pathname.match(/^\/category\/([^/]+)\//)?.[1];
   <div class="flex min-w-0 flex-col gap-7 px-5 py-5 sm:px-6">
     <div class="flex items-center justify-between gap-6">
       <a
-        href="/"
+        href={withBase('/')}
         class="font-display text-3xl leading-none font-extrabold tracking-[-0.045em]"
         aria-label="Catalyst home">Catalyst</a
       >
@@ -31,7 +33,7 @@ const activeCategory = Astro.url.pathname.match(/^\/category\/([^/]+)\//)?.[1];
         data-mobile-menu-close
         aria-label="Close navigation menu"
       >
-        <span class="icon h-5 w-5" style="--icon: url('/icons/close.svg')" aria-hidden="true"></span>
+        <Icon name="close" class="h-5 w-5" />
       </button>
     </div>
 
@@ -41,7 +43,7 @@ const activeCategory = Astro.url.pathname.match(/^\/category\/([^/]+)\//)?.[1];
           categories.map((category) => (
             <li>
               <a
-                href={`/category/${category.slug}/`}
+                href={withBase(`/category/${category.slug}/`)}
                 class:list={[
                   'block border-b border-border py-3 font-display text-3xl font-bold leading-none',
                   category.slug === activeCategory ? 'text-primary' : 'text-foreground',
@@ -58,16 +60,16 @@ const activeCategory = Astro.url.pathname.match(/^\/category\/([^/]+)\//)?.[1];
     <nav aria-label="Publication pages">
       <p class="eyebrow mb-3 text-muted-foreground">Pages</p>
       <ul class="grid gap-2.5 text-sm">
-        <li><a href="/all-news/" class="story-link">All stories</a></li>
-        <li><a href="/authors/" class="story-link">Contributors</a></li>
-        <li><a href="/about/" class="story-link">About</a></li>
-        <li><a href="/contact/" class="story-link">Contact</a></li>
+        <li><a href={withBase('/all-news/')} class="story-link">All stories</a></li>
+        <li><a href={withBase('/authors/')} class="story-link">Contributors</a></li>
+        <li><a href={withBase('/about/')} class="story-link">About</a></li>
+        <li><a href={withBase('/contact/')} class="story-link">Contact</a></li>
       </ul>
     </nav>
 
     <div class="grid gap-3 pb-4">
       <a
-        href={contribute.cta.href}
+        href={withBase(contribute.cta.href)}
         class="button-primary min-h-11 px-4 py-3 text-center text-sm font-semibold"
       >
         {contribute.cta.label}

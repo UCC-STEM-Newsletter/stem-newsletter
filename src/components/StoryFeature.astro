@@ -5,6 +5,7 @@ import { leadSizes, leadWidths } from '../lib/images';
 import { formatDateShort } from '../lib/format';
 import { authorBySlug } from '../data/authors';
 import CategoryChip from './CategoryChip.astro';
+import { withBase } from '../lib/url';
 
 /**
  * Desk spotlight: the lead story of a desk block, rendered as a large
@@ -20,7 +21,7 @@ const { post, sizes = leadSizes } = Astro.props;
 const author = authorBySlug.get(post.data.author);
 ---
 
-<a href={`/post/${post.id}/`} class="story-tile group block">
+<a href={withBase(`/post/${post.id}/`)} class="story-tile group block">
   <div class="story-frame aspect-[16/10]">
     <Image
       src={post.data.cover}

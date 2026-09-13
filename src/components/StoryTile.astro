@@ -4,6 +4,7 @@ import { readingTime, type Post } from '../lib/posts';
 import { tileSizes, tileWidths } from '../lib/images';
 import { formatDateShort } from '../lib/format';
 import CategoryChip from './CategoryChip.astro';
+import { withBase } from '../lib/url';
 
 /**
  * Standard grid card: 16:10 photograph, desk chip, headline and a
@@ -19,7 +20,7 @@ interface Props {
 const { post, headingLevel: Heading = 'h3', loading = 'lazy' } = Astro.props;
 ---
 
-<a href={`/post/${post.id}/`} class="story-tile group flex h-full flex-col">
+<a href={withBase(`/post/${post.id}/`)} class="story-tile group flex h-full flex-col">
   <div class="story-frame aspect-[16/10]">
     <Image
       src={post.data.cover}
