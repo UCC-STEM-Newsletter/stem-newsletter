@@ -12,9 +12,11 @@ import CategoryChip from './CategoryChip.astro';
  */
 interface Props {
   post: Post;
+  /** Responsive hint; defaults to the two-thirds width it usually occupies. */
+  sizes?: string;
 }
 
-const { post } = Astro.props;
+const { post, sizes = leadSizes } = Astro.props;
 const author = authorBySlug.get(post.data.author);
 ---
 
@@ -23,7 +25,7 @@ const author = authorBySlug.get(post.data.author);
     <Image
       src={post.data.cover}
       widths={leadWidths}
-      sizes={leadSizes}
+      sizes={sizes}
       alt={post.data.coverAlt}
       loading="lazy"
       decoding="async"

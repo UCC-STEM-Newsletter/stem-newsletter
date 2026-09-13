@@ -143,15 +143,16 @@ for (const story of stories) {
 console.log(`\nContent: ${stories.length} stories in ${path.relative(ROOT, POSTS_DIR)}/`);
 console.log(
   `Front page: tier ${plan.tier} — ${plan.splitBand ? 'lead + Latest rail' : 'full-width lead'}` +
-    `${plan.picks ? `, up to ${plan.picks} picks` : ''}` +
-    `, desks need ${plan.deskMinimum}+ stories\n`,
+    `${plan.picks ? `, up to ${plan.picks} picks` : ''}\n`,
 );
 
 console.log('Desks');
 for (const category of categories) {
   const inDesk = perDesk.get(category.slug) ?? [];
-  const renders = inDesk.length >= plan.deskMinimum;
-  const note = inDesk.length === 0 ? 'empty (shows a "no stories yet" state)' : renders ? 'section' : 'too few for a section';
+  const note =
+    inDesk.length === 0
+      ? 'empty (shows a "no stories yet" state)'
+      : `${inDesk.length === 1 ? 'single feature' : 'section'}`;
   console.log(`  ${category.name.padEnd(14)} ${String(inDesk.length).padStart(2)} stories  — ${note}`);
 }
 

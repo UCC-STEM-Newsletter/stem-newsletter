@@ -30,10 +30,6 @@ export interface Composition {
    * is also what happens when too few curated picks survive de-duplication.
    */
   picks: number;
-  /** A desk needs at least this many stories to earn its own block. */
-  deskMinimum: number;
-  /** Items in the closing catch-all grid (a multiple of three); zero means unlimited. */
-  closing: number;
 }
 
 /**
@@ -55,10 +51,8 @@ export const tierFor = (count: number): Tier => {
 };
 
 /**
- * Plan the front page for a given archive size.
- *
- * `closing: 0` means "show everything left"; every other block is a hard cap
- * that the page clamps to whatever is actually available.
+ * Plan the front page for a given archive size. Each count is a cap that the
+ * page clamps to whatever is actually available.
  */
 export const compositionFor = (count: number): Composition => {
   const tier = tierFor(count);
@@ -67,12 +61,12 @@ export const compositionFor = (count: number): Composition => {
   // rail needs. A two-item rail would make a squat banner of the lead, so the
   // split only starts once the rail can hold a full set.
   if (tier === 'C') {
-    return { tier, splitBand: true, latest: 5, picks: 6, deskMinimum: 2, closing: 9 };
+    return { tier, splitBand: true, latest: 5, picks: 6 };
   }
   if (tier === 'B') {
-    return { tier, splitBand: true, latest: 4, picks: 6, deskMinimum: 2, closing: 9 };
+    return { tier, splitBand: true, latest: 4, picks: 6 };
   }
-  return { tier, splitBand: false, latest: 0, picks: 0, deskMinimum: 1, closing: 0 };
+  return { tier, splitBand: false, latest: 0, picks: 0 };
 };
 
 /**

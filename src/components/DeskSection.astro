@@ -1,6 +1,7 @@
 ---
 import type { Post } from '../lib/posts';
 import { categoryBySlug } from '../data/categories';
+import { articleSizes } from '../lib/images';
 import StoryFeature from './StoryFeature.astro';
 import StoryMini from './StoryMini.astro';
 import StoryTile from './StoryTile.astro';
@@ -8,10 +9,11 @@ import StoryTile from './StoryTile.astro';
 /**
  * A desk's homepage block.
  *
- * The layout is chosen from how many stories the desk actually has, so a new
- * desk looks deliberate at two stories and expands into a spotlight once it has
- * enough for one. Desks below the composition's minimum are not rendered at
- * all — the page decides that, not this component.
+ * The layout is chosen from how many stories the desk actually has, and every
+ * variant fills whole rows of the page's three-column spine. There is no
+ * closing catch-all grid on the front page, so this is where a story gets
+ * surfaced: the one-story case exists precisely so a desk's first story is not
+ * stranded until a second arrives.
  */
 interface Props {
   category: string;
@@ -25,14 +27,14 @@ const name = meta?.name ?? category;
 const total = posts.length;
 const count = String(total).padStart(2, '0');
 
+const alone = total === 1;
 // Five or more earns a spotlight: one feature plus a stacked rail.
 const spotlight = total >= 5;
 const feature = posts[0];
 const rest = posts.slice(1);
 
-// Three stories fill one row of the page's three-column spine; two or four go
-// two-up (four as a 2x2) so nothing is orphaned on a row of its own. Five or
-// more earns the spotlight above instead.
+// Three fills one row of the spine; two or four go two-up (four as a 2x2) so
+// nothing is orphaned on a row of its own.
 const gridClass =
   total === 3
     ? 'grid-cards col-rules-3 grid gap-x-8 gap-y-10 md:grid-cols-3'
@@ -52,7 +54,9 @@ const gridClass =
         </p>
       </div>
       <div class="flex items-center gap-4">
-        <span class="eyebrow hidden text-muted-foreground sm:inline">{count} stories</span>
+        <span class="eyebrow hidden text-muted-foreground sm:inline">
+          {count} {total === 1 ? 'story' : 'stories'}
+        </span>
         <a
           href={`/category/${category}/`}
           class="button-quiet inline-flex min-h-9 items-center px-3.5 font-mono text-[10px] font-semibold tracking-[0.22em] uppercase"
@@ -64,7 +68,9 @@ const gridClass =
   </div>
 
   {
-    spotlight && feature ? (
+    alone && feature ? (
+      <StoryFeature post={feature} sizes={articleSizes} />
+    ) : spotlight && feature ? (
       <div class="grid-cards col-rules-split grid gap-x-8 gap-y-8 lg:grid-cols-3">
         <div class="flex min-w-0 flex-col lg:col-span-2">
           <StoryFeature post={feature} />

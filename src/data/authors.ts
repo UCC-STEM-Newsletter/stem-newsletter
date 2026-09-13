@@ -26,6 +26,12 @@ export const authors: Author[] = [
     role: 'Technology Editor',
     bio: 'Theo covers computing and artificial intelligence, with an eye on what these systems actually cost to run and maintain.',
   },
+  {
+    slug: 'ines-haddad',
+    name: 'Ines Haddad',
+    role: 'Mathematics Editor',
+    bio: 'Ines writes about pure and applied mathematics, and about the places where a proof changes what a model is allowed to claim.',
+  },
 ];
 
 export const authorBySlug = new Map(authors.map((author) => [author.slug, author]));

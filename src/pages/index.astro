@@ -3,7 +3,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import StoryOverlay from '../components/StoryOverlay.astro';
 import StoryMini from '../components/StoryMini.astro';
-import StoryTile from '../components/StoryTile.astro';
 import StoryRank from '../components/StoryRank.astro';
 import DeskSection from '../components/DeskSection.astro';
 import Contribute from '../components/Contribute.astro';
@@ -37,21 +36,11 @@ const picked = availablePicks.slice(0, picksThatFit);
 const showPicks = picked.length >= PICKS_MINIMUM;
 if (showPicks) for (const post of picked) used.add(post.id);
 
-// A desk needs a couple of stories before it earns a section of its own.
+// Every non-empty desk gets a block. With no closing grid on the front page,
+// this is what surfaces a desk's stories — including a desk with only one.
 const desks = categories
   .map((category) => ({ category: category.slug, posts: postsByCategory(posts, category.slug) }))
-  .filter((desk) => desk.posts.length >= plan.deskMinimum);
-
-const remaining = posts.filter((post) => !used.has(post.id));
-// Tier A has to show everything left, so it takes a ragged final row if that is
-// what the archive gives. From tier B the closing grid is a sampler, so it is
-// trimmed to whole rows of three.
-const closingFits =
-  plan.closing === 0
-    ? remaining.length
-    : Math.floor(Math.min(remaining.length, plan.closing) / 3) * 3;
-const closing = remaining.slice(0, closingFits);
-const showClosing = plan.closing === 0 ? closingFits > 0 : closingFits >= 3;
+  .filter((desk) => desk.posts.length > 0);
 
 // With a split band the lead region is two columns of a single grid row.
 // Because grid items stretch, the hero fills whatever height the rail needs, so
@@ -121,31 +110,4 @@ const split = plan.splitBand && latest.length > 0;
   <section class="reveal mt-24"></section>
   <Contribute />
 
-  {
-    showClosing && (
-      <section class="mx-auto max-w-7xl px-5 pt-20 sm:px-6 lg:px-10">
-        <SectionHeading
-          heading={plan.tier === 'A' ? 'All stories' : 'More from the desks'}
-          blurb="Everything else we have published, newest first."
-          actionLabel="Archive"
-          actionHref="/all-news/"
-        />
-        <div class="mb-9 flex flex-wrap gap-2">
-          {categories.map((category) => (
-            <a
-              href={`/category/${category.slug}/`}
-              class="button-quiet inline-flex min-h-8 items-center px-3 font-mono text-[10px] tracking-[0.18em] uppercase"
-            >
-              {category.name}
-            </a>
-          ))}
-        </div>
-        <div class="grid-cards col-rules-3 grid gap-x-8 gap-y-10 md:grid-cols-3">
-          {closing.map((post) => (
-            <StoryTile post={post} />
-          ))}
-        </div>
-      </section>
-    )
-  }
 </BaseLayout>
