@@ -1,0 +1,48 @@
+---
+/**
+ * Inline Lucide glyphs. Only the handful the design actually uses are bundled,
+ * which keeps the markup identical to the reference without pulling in a whole
+ * icon package.
+ */
+type IconName = 'sun' | 'moon' | 'search' | 'user' | 'calendar' | 'clock';
+
+interface Props {
+  name: IconName;
+  class?: string;
+}
+
+const { name, class: className = 'h-4 w-4' } = Astro.props;
+
+const paths: Record<IconName, string> = {
+  sun: `<circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>`,
+  moon: `<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>`,
+  search: `<path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle>`,
+  user: `<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>`,
+  calendar: `<path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path>`,
+  clock: `<circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path>`,
+};
+
+const classes: Record<IconName, string> = {
+  sun: 'theme-icon theme-icon-sun',
+  moon: 'theme-icon theme-icon-moon',
+  search: '',
+  user: '',
+  calendar: '',
+  clock: '',
+};
+---
+
+<svg
+  class={`lucide-icon ${classes[name]} ${className}`.trim()}
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  set:html={paths[name]}
+/>

@@ -1,0 +1,66 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../data/site';
+import { authors } from '../../data/authors';
+import { allPosts, postsByAuthor } from '../../lib/posts';
+import { pluralize } from '../../lib/format';
+
+/** Contributors index: `/authors/` */
+
+const posts = await allPosts();
+const rows = authors.map((author) => ({
+  author,
+  count: postsByAuthor(posts, author.slug).length,
+}));
+---
+
+<BaseLayout
+  title={`Authors | ${site.name}`}
+  description="Meet the writers and editors publishing analysis on Semnal."
+>
+  <section class="mx-auto max-w-7xl px-6 pt-12 lg:px-10">
+    <div class="opener rule-top border-b border-border pt-4 pb-7">
+      <p class="eyebrow text-primary">Authors</p>
+      <h1 class="mt-2 font-display text-5xl leading-[0.95] font-extrabold md:text-6xl">
+        Contributors
+      </h1>
+      <p class="mt-4 max-w-2xl text-muted-foreground">
+        Browse author profiles and their latest reporting across Semnal.
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-6 pt-10 lg:px-10">
+    <div class="grid-cards col-rules-3 grid gap-x-8 gap-y-10 md:grid-cols-3">
+      {
+        rows.map(({ author, count }) => (
+          <a
+            href={`/author/${author.slug}/`}
+            class="story-tile group block rule-top pt-4"
+          >
+            <span class="flex items-center gap-4">
+              <span
+                class="grid h-14 w-14 shrink-0 place-items-center overflow-hidden bg-primary font-display text-xl font-bold text-primary-foreground"
+                aria-hidden="true"
+              >
+                {author.name.charAt(0)}
+              </span>
+              <span>
+                <span class="story-headline block font-display text-2xl leading-[1.08] font-extrabold">
+                  {author.name}
+                </span>
+                <span class="mt-1 block text-sm text-muted-foreground">{author.role}</span>
+              </span>
+            </span>
+            <span class="mt-4 block text-pretty text-sm leading-6 text-muted-foreground">
+              {author.bio}
+            </span>
+            <span class="eyebrow mt-5 block border-t border-border pt-3 text-primary">
+              {pluralize(count, 'story')}
+            </span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

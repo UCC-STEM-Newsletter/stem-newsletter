@@ -1,0 +1,48 @@
+---
+import { Image } from 'astro:assets';
+import type { Post } from '../lib/posts';
+import { tileSizes, tileWidths } from '../lib/images';
+import { formatDateShort } from '../lib/format';
+import CategoryChip from './CategoryChip.astro';
+
+/**
+ * Standard grid card: 16:10 photograph, desk chip, headline and a
+ * date/read-time footer pinned to the bottom of the card.
+ */
+interface Props {
+  post: Post;
+  /** `h3` inside grids, `h2` when the card stands alone. */
+  headingLevel?: 'h2' | 'h3';
+  loading?: 'eager' | 'lazy';
+}
+
+const { post, headingLevel: Heading = 'h3', loading = 'lazy' } = Astro.props;
+---
+
+<a href={`/post/${post.id}/`} class="story-tile group flex h-full flex-col">
+  <div class="story-frame aspect-[16/10]">
+    <Image
+      src={post.data.cover}
+      widths={tileWidths}
+      sizes={tileSizes}
+      alt={post.data.coverAlt}
+      loading={loading}
+      decoding="async"
+      class="h-full w-full object-cover"
+    />
+  </div>
+  <div class="flex flex-1 flex-col pt-4">
+    <CategoryChip category={post.data.category} />
+    <Heading
+      class="story-headline mt-2.5 font-display text-lg leading-[1.15] font-bold text-balance md:text-xl"
+    >
+      {post.data.title}
+    </Heading>
+    <p
+      class="mt-auto flex items-center justify-between gap-3 pt-3 font-mono text-[11px] text-muted-foreground"
+    >
+      <span>{formatDateShort(post.data.publishedAt)}</span>
+      <span>{post.data.readMinutes} min</span>
+    </p>
+  </div>
+</a>

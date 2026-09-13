@@ -1,0 +1,38 @@
+---
+import type { Post } from '../lib/posts';
+import { rank } from '../lib/format';
+
+/**
+ * Headline ticker beneath the masthead. The list is rendered twice so the
+ * marquee can loop seamlessly.
+ */
+interface Props {
+  posts: Post[];
+}
+
+const { posts } = Astro.props;
+const loop = [...posts, ...posts];
+---
+
+<div class="border-b border-border bg-surface">
+  <div
+    class="mx-auto flex h-10 max-w-7xl items-center gap-4 overflow-hidden px-5 sm:px-6 lg:px-10"
+  >
+    <span class="eyebrow shrink-0 border-r border-border-strong pr-4 text-primary">Live wire</span>
+    <div class="flex-1 overflow-hidden">
+      <div class="animate-marquee flex gap-10 whitespace-nowrap text-sm">
+        {
+          loop.map((post, index) => (
+            <a
+              href={`/post/${post.id}/`}
+              class="shrink-0 text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <span class="mr-2 font-mono text-[11px] text-primary">{rank(index % posts.length)}</span>
+              {post.data.title}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</div>

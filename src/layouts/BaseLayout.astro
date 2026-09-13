@@ -1,0 +1,106 @@
+---
+import '../styles/global.css';
+import { site } from '../data/site';
+import { categories } from '../data/categories';
+import { allPosts, pickPosts } from '../lib/posts';
+import { home } from '../data/homepage';
+import SiteTopbar from '../components/SiteTopbar.astro';
+import LiveWire from '../components/LiveWire.astro';
+import SearchDialog from '../components/SearchDialog.astro';
+import MobileMenu from '../components/MobileMenu.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import themeBoot from '../scripts/theme-boot.js?raw';
+
+interface Props {
+  /** Full `<title>`; pages compose their own suffix. */
+  title: string;
+  description: string;
+  ogType?: 'website' | 'article';
+  /** Absolute or root-relative social image. */
+  image?: string;
+  jsonLd?: Record<string, unknown>;
+}
+
+const {
+  title,
+  description,
+  ogType = 'website',
+  image = '/og-image.png',
+  jsonLd,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const socialImage = new URL(image, Astro.site);
+
+const posts = await allPosts();
+const ticker = pickPosts(posts, home.ticker);
+
+const schema = jsonLd ?? {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: site.name,
+  url: Astro.site?.origin,
+  description: site.description,
+  publisher: { '@type': 'Organization', name: site.publisher },
+};
+---
+
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/libre-franklin/LibreFranklin-Variable-latin.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/geist/Geist-Variable-latin.woff2"
+      crossorigin
+    />
+    <link rel="alternate" type="application/rss+xml" title="Semnal RSS" href="/rss.xml" />
+
+    <meta property="og:locale" content={site.locale} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage} />
+
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+    <script is:inline set:html={themeBoot} />
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <SiteTopbar />
+    <LiveWire posts={ticker} />
+    <SearchDialog />
+    <div class="mobile-menu-backdrop" data-mobile-menu-backdrop hidden></div>
+    <MobileMenu categories={categories} posts={ticker} />
+
+    <main id="content" class="min-h-screen">
+      <slot />
+    </main>
+
+    <SiteFooter />
+    <slot name="after-footer" />
+    <script>
+      import '../scripts/site.js';
+    </script>
+  </body>
+</html>

@@ -1,0 +1,47 @@
+---
+import { glyphs } from '../lib/share';
+
+/**
+ * Share button for the story opener. Behaviour lives in `src/scripts/share.ts`,
+ * which fills in the real URL and target links on the client.
+ */
+interface Props {
+  variant?: 'inline' | 'button';
+}
+
+const { variant = 'inline' } = Astro.props;
+---
+
+{
+  variant === 'inline' ? (
+    <button
+      type="button"
+      class="share-inline eyebrow"
+      aria-haspopup="dialog"
+      aria-controls="share-sheet"
+      data-share-open
+    >
+      <span class="share-glyph" aria-hidden="true">
+        <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor">
+          <path d={glyphs.share} />
+        </svg>
+      </span>
+      <span>Share</span>
+    </button>
+  ) : (
+    <button
+      type="button"
+      class="button-quiet eyebrow inline-flex min-h-10 items-center gap-2 px-4"
+      aria-haspopup="dialog"
+      aria-controls="share-sheet"
+      data-share-open
+    >
+      <span class="share-glyph" aria-hidden="true">
+        <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor">
+          <path d={glyphs.share} />
+        </svg>
+      </span>
+      <span>Share this article</span>
+    </button>
+  )
+}

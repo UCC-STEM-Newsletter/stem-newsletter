@@ -1,0 +1,56 @@
+---
+import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import StoryTile from '../../components/StoryTile.astro';
+import Newsletter from '../../components/Newsletter.astro';
+import { site } from '../../data/site';
+import { tags, tagBySlug } from '../../data/tags';
+import { allPosts, postsByTag } from '../../lib/posts';
+import { pluralize } from '../../lib/format';
+
+/** Tag index: `/tag/agents/` … */
+
+export const getStaticPaths = (async () => {
+  const posts = await allPosts();
+
+  return tags
+    .map((tag) => ({ tag, posts: postsByTag(posts, tag.slug) }))
+    .filter((entry) => entry.posts.length > 0)
+    .map((entry) => ({
+      params: { tag: entry.tag.slug },
+      props: { tag: entry.tag.slug, posts: entry.posts },
+    }));
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { tag, posts } = Astro.props;
+const name = tagBySlug.get(tag)?.name ?? tag;
+---
+
+<BaseLayout
+  title={`${name} stories | ${site.name}`}
+  description={`Stories tagged ${name} on Semnal.`}
+>
+  <section class="mx-auto max-w-7xl px-6 pt-12 lg:px-10">
+    <div class="opener rule-top border-b border-border pt-4 pb-7">
+      <p class="eyebrow text-primary">Tag</p>
+      <h1 class="mt-2 font-display text-5xl leading-[0.95] font-extrabold md:text-6xl">
+        {name}
+      </h1>
+      <p class="mt-4 max-w-2xl text-muted-foreground">
+        {pluralize(posts.length, 'story')} tagged {name}.
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-6 pt-10 lg:px-10">
+    <div class="grid-cards col-rules-3 grid gap-x-8 gap-y-10 md:grid-cols-3">
+      {posts.map((post) => <StoryTile post={post} loading="eager" />)}
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-6 pt-24 lg:px-10">
+    <Newsletter />
+  </section>
+</BaseLayout>

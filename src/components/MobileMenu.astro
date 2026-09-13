@@ -1,0 +1,109 @@
+---
+import { Image } from 'astro:assets';
+import type { Post } from '../lib/posts';
+import type { Category } from '../data/categories';
+import { railSizes, railWidths } from '../lib/images';
+import { rank } from '../lib/format';
+
+/**
+ * Off-canvas navigation for narrow viewports, including a drag-scrollable
+ * "Popular now" rail.
+ */
+interface Props {
+  categories: Pick<Category, 'slug' | 'name'>[];
+  posts: Post[];
+}
+
+const { categories, posts } = Astro.props;
+const activeCategory = Astro.url.pathname.match(/^\/category\/([^/]+)\//)?.[1];
+---
+
+<div id="mobile-menu-panel" class="mobile-menu-panel" hidden>
+  <div class="flex min-w-0 flex-col gap-7 px-5 py-5 sm:px-6">
+    <div class="flex items-center justify-between gap-6">
+      <a
+        href="/"
+        class="font-display text-3xl leading-none font-extrabold tracking-[-0.045em]"
+        aria-label="Semnal home">Semnal</a
+      >
+      <button
+        type="button"
+        class="mobile-menu-close grid h-10 w-10 shrink-0 place-items-center border border-border-strong"
+        data-mobile-menu-close
+        aria-label="Close navigation menu"
+      >
+        <span class="icon h-5 w-5" style="--icon: url('/icons/close.svg')" aria-hidden="true"></span>
+      </button>
+    </div>
+
+    <nav aria-label="Mobile navigation">
+      <ul class="grid gap-1">
+        {
+          categories.map((category) => (
+            <li>
+              <a
+                href={`/category/${category.slug}/`}
+                class:list={[
+                  'block border-b border-border py-3 font-display text-3xl font-bold leading-none',
+                  category.slug === activeCategory ? 'text-primary' : 'text-foreground',
+                ]}
+              >
+                {category.name}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <nav aria-label="Publication pages">
+      <p class="eyebrow mb-3 text-muted-foreground">Pages</p>
+      <ul class="grid gap-2.5 text-sm">
+        <li><a href="/all-news/" class="story-link">All News</a></li>
+        <li><a href="/about/" class="story-link">About</a></li>
+        <li><a href="/contact/" class="story-link">Contact</a></li>
+        <li><a href="/privacy/" class="story-link">Privacy</a></li>
+      </ul>
+    </nav>
+
+    <div class="grid gap-3">
+      <a href="/#newsletter" class="button-primary min-h-11 px-4 py-3 text-center text-sm font-semibold"
+        >Subscribe to the briefing</a
+      >
+    </div>
+
+    <div class="min-w-0 pb-4">
+      <div class="mb-4 border-b border-border pb-3">
+        <h2 class="eyebrow text-muted-foreground">Popular now</h2>
+      </div>
+      <div class="mobile-menu-trending" data-drag-scroll>
+        {
+          posts.map((post, index) => (
+            <a
+              href={`/post/${post.id}/`}
+              class="story-tile mobile-menu-trending-card group shrink-0"
+            >
+              <Image
+                src={post.data.cover}
+                widths={railWidths}
+                sizes={railSizes}
+                alt={post.data.coverAlt}
+                loading="lazy"
+                decoding="async"
+                class="aspect-[16/10] w-full object-cover"
+              />
+              <span class="block p-3">
+                <span class="eyebrow text-primary">{rank(index)}</span>
+                <span
+                  class="story-headline mt-1.5 block font-display text-base leading-[1.16] font-bold text-balance"
+                >
+                  {post.data.title}
+                </span>
+              </span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</div>

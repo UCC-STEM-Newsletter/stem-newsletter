@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/site';
+
+const sections = [
+  {
+    heading: 'Editorial Direction',
+    body: 'Semnal tracks the forces reshaping technology, capital, energy, science, and global business. The theme is designed for concise reporting, useful context, and a homepage that can carry a busy daily news cycle.',
+  },
+  {
+    heading: 'Editorial Standards',
+    body: 'Stories should be timely, clearly credited, and useful to readers who want the signal without refreshing every dashboard, demo day, and regulatory filing.',
+  },
+];
+---
+
+<BaseLayout
+  title={`About | ${site.name}`}
+  description="Learn about Semnal, the editorial voice, and the technology coverage readers can expect."
+>
+  <section class="mx-auto max-w-4xl px-6 pt-12 lg:px-10">
+    <p class="eyebrow text-primary">Masthead</p>
+    <h1 class="mt-3 font-display text-5xl leading-[0.95] font-extrabold md:text-7xl">Semnal</h1>
+    <p class="mt-6 max-w-2xl text-pretty text-xl text-muted-foreground">{site.description}</p>
+  </section>
+
+  <section class="mx-auto grid max-w-4xl gap-10 px-6 pt-14 lg:px-10">
+    {
+      sections.map((section) => (
+        <div class="border-t border-border pt-8">
+          <h2 class="font-display text-3xl font-bold tracking-tight">{section.heading}</h2>
+          <p class="mt-4 text-pretty leading-7 text-muted-foreground">{section.body}</p>
+        </div>
+      ))
+    }
+  </section>
+</BaseLayout>

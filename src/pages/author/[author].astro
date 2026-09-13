@@ -1,0 +1,73 @@
+---
+import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import StoryTile from '../../components/StoryTile.astro';
+import { site } from '../../data/site';
+import { authors } from '../../data/authors';
+import { allPosts, postsByAuthor } from '../../lib/posts';
+import { pluralize } from '../../lib/format';
+
+/** Author profile: `/author/rafael-stone/` … */
+
+export const getStaticPaths = (async () => {
+  const posts = await allPosts();
+
+  return authors.map((author) => ({
+    params: { author: author.slug },
+    props: { author: author.slug, posts: postsByAuthor(posts, author.slug) },
+  }));
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { author, posts } = Astro.props;
+const meta = authors.find((entry) => entry.slug === author);
+const name = meta?.name ?? author;
+---
+
+<BaseLayout
+  title={`${name} - Author | ${site.name}`}
+  description={`${name}, ${meta?.role} at Semnal. ${meta?.bio}`}
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name,
+    jobTitle: meta?.role,
+    description: meta?.bio,
+    url: new URL(Astro.url.pathname, Astro.site).href,
+  }}
+>
+  <section class="mx-auto max-w-7xl px-6 pt-12 lg:px-10">
+    <div class="grid gap-6 border-b border-border pb-8 md:grid-cols-[auto_minmax(0,1fr)] md:items-start">
+      <div
+        class="grid h-24 w-24 place-items-center overflow-hidden bg-primary font-display text-4xl font-bold text-primary-foreground md:h-32 md:w-32 md:text-5xl"
+        aria-hidden="true"
+      >
+        {name.charAt(0)}
+      </div>
+      <div>
+        <p class="eyebrow text-primary">Author</p>
+        <h1 class="mt-2 font-display text-5xl leading-[0.95] font-extrabold md:text-6xl">{name}</h1>
+        <p class="mt-2 font-medium text-primary">{meta?.role}</p>
+        <p class="mt-4 max-w-3xl text-pretty text-muted-foreground">{meta?.bio}</p>
+        <p class="eyebrow mt-5 text-muted-foreground">
+          {pluralize(posts.length, 'published story', 'published stories')}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-6 pt-10 lg:px-10">
+    <div class="mb-6 flex items-end justify-between gap-4">
+      <h2 class="font-display text-2xl font-bold tracking-tight md:text-3xl">
+        Latest by {name}
+      </h2>
+      <a href="/authors/" class="story-link text-sm text-muted-foreground hover:text-foreground">
+        All authors
+      </a>
+    </div>
+    <div class="grid-cards col-rules-3 grid gap-x-8 gap-y-10 md:grid-cols-3">
+      {posts.map((post) => <StoryTile post={post} loading="eager" />)}
+    </div>
+  </section>
+</BaseLayout>

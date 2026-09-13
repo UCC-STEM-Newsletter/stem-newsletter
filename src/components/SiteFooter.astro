@@ -1,0 +1,90 @@
+---
+import { site, footerColumns } from '../data/site';
+import { categories } from '../data/categories';
+import Icon from './Icon.astro';
+---
+
+<footer class="newsroom-footer mt-28 bg-surface">
+  <div
+    class="mx-auto grid max-w-7xl gap-10 px-5 py-14 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr_1fr] lg:px-10"
+  >
+    <div>
+      <a
+        href="/"
+        class="font-display text-3xl leading-none font-extrabold tracking-[-0.045em]"
+        aria-label="Semnal home">Semnal</a
+      >
+      <p class="mt-5 max-w-sm text-sm leading-6 text-muted-foreground">{site.description}</p>
+      <div class="mt-6 flex flex-wrap gap-2 text-muted-foreground">
+        <a
+          href={site.social.linkedin}
+          class="icon-button h-10 w-10"
+          aria-label="Semnal on LinkedIn"
+          rel="noreferrer"
+        >
+          <Icon name="linkedin" class="h-4 w-4" />
+        </a>
+        <a
+          href={site.social.x}
+          class="icon-button h-10 w-10"
+          aria-label="Semnal on X"
+          rel="noreferrer"
+        >
+          <Icon name="x" class="h-4 w-4" />
+        </a>
+        <a
+          href={site.social.youtube}
+          class="icon-button h-10 w-10"
+          aria-label="Semnal on YouTube"
+          rel="noreferrer"
+        >
+          <Icon name="youtube" class="h-4 w-4" />
+        </a>
+        <a href="/rss.xml" class="icon-button h-10 w-10" aria-label="RSS feed">
+          <Icon name="rss" class="h-4 w-4" />
+        </a>
+      </div>
+    </div>
+
+    <div>
+      <h2 class="eyebrow text-muted-foreground">Sections</h2>
+      <ul class="mt-4 space-y-2 text-sm">
+        {
+          categories.map((category) => (
+            <li>
+              <a href={`/category/${category.slug}/`} class="story-link">
+                {category.name}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    {
+      footerColumns.map((column) => (
+        <div>
+          <h2 class="eyebrow text-muted-foreground">{column.heading}</h2>
+          <ul class="mt-4 space-y-2 text-sm">
+            {column.links.map((link) => (
+              <li>
+                <a href={link.href} class="story-link">
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="border-t border-border">
+    <div
+      class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-5 py-6 text-xs text-muted-foreground sm:flex-row sm:px-6 lg:px-10"
+    >
+      <p>Copyright 2026 Semnal.</p>
+      <p>Built with Astro for fast editorial publishing.</p>
+    </div>
+  </div>
+</footer>

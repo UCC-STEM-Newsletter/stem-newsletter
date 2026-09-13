@@ -1,0 +1,41 @@
+---
+import { categoryBySlug } from '../data/categories';
+import { accentClass } from '../lib/accent';
+
+/**
+ * Desk label. Renders as a link on story pages and as a plain span inside
+ * story tiles (where the whole card is already a link).
+ */
+interface Props {
+  category: string;
+  /** Tailwind text-size utility; the design uses 10px or 11px. */
+  size?: string;
+  /** Invert for placement over photography. */
+  onImage?: boolean;
+  href?: string | null;
+  class?: string;
+}
+
+const { category, size = 'text-[10px]', onImage = false, href, class: className = '' } = Astro.props;
+
+const meta = categoryBySlug.get(category);
+const label = meta?.name ?? category;
+const classes = [
+  'category-chip',
+  onImage ? 'category-chip-on-image' : accentClass(meta?.accent),
+  size,
+  className,
+]
+  .filter(Boolean)
+  .join(' ');
+---
+
+{
+  href ? (
+    <a href={href} class={classes}>
+      {label}
+    </a>
+  ) : (
+    <span class={classes}>{label}</span>
+  )
+}

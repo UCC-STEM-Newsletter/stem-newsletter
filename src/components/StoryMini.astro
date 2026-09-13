@@ -1,0 +1,47 @@
+---
+import { Image } from 'astro:assets';
+import type { Post } from '../lib/posts';
+import { formatDateShort } from '../lib/format';
+import { thumbSize } from '../lib/images';
+import CategoryChip from './CategoryChip.astro';
+
+/**
+ * Compact horizontal row with a square thumbnail. Used by the "Latest",
+ * "Across the site" and desk-spotlight rails.
+ */
+interface Props {
+  post: Post;
+  loading?: 'eager' | 'lazy';
+}
+
+const { post, loading = 'eager' } = Astro.props;
+---
+
+<a
+  href={`/post/${post.id}/`}
+  class="story-tile group grid grid-cols-[84px_minmax(0,1fr)] items-start gap-4 border-b border-border py-4 last:border-b-0 sm:grid-cols-[104px_minmax(0,1fr)]"
+>
+  <div class="story-frame aspect-square">
+    <Image
+      src={post.data.cover}
+      width={thumbSize}
+      height={thumbSize}
+      fit="cover"
+      alt={post.data.coverAlt}
+      loading={loading}
+      decoding="async"
+      class="h-full w-full object-cover"
+    />
+  </div>
+  <div class="min-w-0">
+    <CategoryChip category={post.data.category} />
+    <h3
+      class="story-headline mt-2 font-display text-base leading-[1.18] font-bold text-balance md:text-[1.05rem]"
+    >
+      {post.data.title}
+    </h3>
+    <p class="mt-2 font-mono text-[11px] text-muted-foreground">
+      {formatDateShort(post.data.publishedAt)} / {post.data.readMinutes} min
+    </p>
+  </div>
+</a>

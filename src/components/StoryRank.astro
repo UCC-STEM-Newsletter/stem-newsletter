@@ -1,0 +1,36 @@
+---
+import type { Post } from '../lib/posts';
+import { formatDateShort, rank } from '../lib/format';
+import CategoryChip from './CategoryChip.astro';
+
+/**
+ * Numbered entry for the "Most read" chart. No image — the rank carries the
+ * visual weight instead.
+ */
+interface Props {
+  post: Post;
+  index: number;
+}
+
+const { post, index } = Astro.props;
+---
+
+<a
+  href={`/post/${post.id}/`}
+  class="story-tile group grid min-h-32 grid-cols-[3.25rem_minmax(0,1fr)] gap-5 border-t border-border pt-4 pb-6 sm:grid-cols-[3.75rem_minmax(0,1fr)]"
+>
+  <span
+    class="font-mono text-3xl leading-none font-normal text-muted-foreground/45 transition-colors group-hover:text-primary md:text-4xl"
+    aria-hidden="true">{rank(index)}</span
+  >
+  <span class="min-w-0">
+    <CategoryChip category={post.data.category} />
+    <span
+      class="story-headline mt-2 block font-display text-xl leading-[1.14] font-bold text-balance lg:text-2xl"
+      >{post.data.title}</span
+    >
+    <span class="mt-2 block font-mono text-[11px] text-muted-foreground">
+      {formatDateShort(post.data.publishedAt)} / {post.data.readMinutes} min
+    </span>
+  </span>
+</a>

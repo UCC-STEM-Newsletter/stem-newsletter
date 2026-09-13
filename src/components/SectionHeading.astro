@@ -1,0 +1,38 @@
+---
+/**
+ * Section masthead: a heavy rule, a display heading, a supporting line and an
+ * optional quiet action on the right.
+ */
+interface Props {
+  heading: string;
+  blurb?: string;
+  headingId?: string;
+  actionLabel?: string;
+  actionHref?: string;
+}
+
+const { heading, blurb, headingId, actionLabel, actionHref } = Astro.props;
+---
+
+<div class="section-rule rule-top"></div>
+<div class="mt-4 mb-7 flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
+  <div class="max-w-xl">
+    <h2
+      id={headingId}
+      class="font-display text-3xl leading-[0.98] font-extrabold md:text-[2.6rem]"
+    >
+      {heading}
+    </h2>
+    {blurb && <p class="mt-2.5 text-pretty text-sm leading-6 text-muted-foreground">{blurb}</p>}
+  </div>
+  {
+    actionLabel && actionHref && (
+      <a
+        href={actionHref}
+        class="button-quiet inline-flex min-h-9 items-center px-3.5 font-mono text-[10px] font-semibold tracking-[0.22em] uppercase"
+      >
+        {actionLabel}
+      </a>
+    )
+  }
+</div>

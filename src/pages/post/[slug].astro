@@ -1,0 +1,295 @@
+---
+import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
+import { render } from 'astro:content';
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CategoryChip from '../../components/CategoryChip.astro';
+import Lucide from '../../components/Lucide.astro';
+import StoryTile from '../../components/StoryTile.astro';
+import Newsletter from '../../components/Newsletter.astro';
+import ShareTrigger from '../../components/ShareTrigger.astro';
+import ShareSheet from '../../components/ShareSheet.astro';
+import { site } from '../../data/site';
+import { categories } from '../../data/categories';
+import { tagBySlug } from '../../data/tags';
+import { authorBySlug } from '../../data/authors';
+import { allPosts, adjacentPosts, postsByCategory } from '../../lib/posts';
+import { formatDate, isoDate } from '../../lib/format';
+import { leadWidths, articleSizes } from '../../lib/images';
+
+/** Story page: `/post/<slug>/` */
+
+export const getStaticPaths = (async () => {
+  const posts = await allPosts();
+
+  return posts.map((post) => {
+    const { previous, next } = adjacentPosts(posts, post);
+    const related = postsByCategory(posts, post.data.category)
+      .filter((entry) => entry.id !== post.id)
+      .slice(0, 3);
+
+    return {
+      params: { slug: post.id },
+      props: { post, previous, next, related },
+    };
+  });
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { post, previous, next, related } = Astro.props;
+const { Content, headings } = await render(post);
+const author = authorBySlug.get(post.data.author);
+const tags = post.data.tags.map((slug) => tagBySlug.get(slug) ?? { slug, name: slug });
+const toc = headings.filter((heading) => heading.depth === 2);
+const canonical = new URL(`/post/${post.id}/`, Astro.site);
+const coverUrl = new URL(post.data.cover.src, Astro.site);
+---
+
+<BaseLayout
+  title={`${post.data.title} | ${site.name}`}
+  description={post.data.description}
+  ogType="article"
+  image={coverUrl.href}
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.data.title,
+    description: post.data.description,
+    image: coverUrl.href,
+    datePublished: post.data.publishedAt.toISOString(),
+    dateModified: post.data.publishedAt.toISOString(),
+    timeRequired: `PT${post.data.readMinutes}M`,
+    author: { '@type': 'Person', name: author?.name ?? post.data.author },
+    publisher: { '@type': 'Organization', name: site.publisher },
+    mainEntityOfPage: canonical.href,
+  }}
+>
+  <article class="mx-auto max-w-7xl px-6 pt-10 pb-16 lg:px-10">
+    <header class="opener">
+      <div>
+        <CategoryChip
+          category={post.data.category}
+          href={`/category/${post.data.category}/`}
+          size="text-[11px]"
+        />
+      </div>
+      <h1
+        class="mt-5 max-w-5xl font-display text-[clamp(2.35rem,5.2vw,4.4rem)] leading-[0.99] font-extrabold text-balance"
+      >
+        {post.data.title}
+      </h1>
+      <p class="mt-6 max-w-3xl text-pretty text-xl leading-relaxed text-muted-foreground">
+        {post.data.description}
+      </p>
+      <div
+        class="mt-8 flex flex-wrap items-center justify-between gap-x-8 gap-y-5 border-t border-border pt-4"
+      >
+        <div
+          class="flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[11px] tracking-[0.14em] uppercase"
+        >
+          <span class="inline-flex min-w-0 items-center gap-1.5 text-muted-foreground">
+            <Lucide name="user" class="h-3 w-3" />By <a
+              href={`/author/${post.data.author}/`}
+              class="story-link text-foreground hover:text-primary">{author?.name ?? post.data.author}</a
+            >
+          </span>
+          <span class="text-muted-foreground/50" aria-hidden="true">/</span>
+          <time
+            class="inline-flex min-w-0 items-center gap-1.5 text-muted-foreground"
+            datetime={isoDate(post.data.publishedAt)}
+          >
+            <Lucide name="calendar" class="h-3 w-3" />{formatDate(post.data.publishedAt)}
+          </time>
+          <span class="text-muted-foreground/50" aria-hidden="true">/</span>
+          <span class="inline-flex min-w-0 items-center gap-1.5 text-muted-foreground">
+            <Lucide name="clock" class="h-3 w-3" />{post.data.readMinutes} min read
+          </span>
+        </div>
+        <ShareTrigger variant="inline" />
+      </div>
+    </header>
+
+    <figure class="mt-10">
+      <div class="story-frame settle h-[clamp(260px,42vw,540px)]">
+        <Image
+          src={post.data.cover}
+          widths={leadWidths}
+          sizes={articleSizes}
+          alt={post.data.coverAlt}
+          loading="eager"
+          decoding="async"
+          class="h-full w-full object-cover object-center"
+        />
+      </div>
+      {
+        post.data.coverCredit && (
+          <figcaption
+            class="mt-2.5 font-mono text-[11px] tracking-[0.14em] text-muted-foreground uppercase"
+          >
+            Image:{' '}
+            <a
+              href={post.data.coverCredit.url}
+              rel="noreferrer"
+              class="story-link hover:text-primary"
+            >
+              {post.data.coverCredit.label}
+            </a>
+          </figcaption>
+        )
+      }
+    </figure>
+
+    <div class="mt-16 grid gap-8 lg:grid-cols-[1fr_minmax(0,720px)_1fr]">
+      <aside class="article-rail hidden self-start lg:sticky lg:block">
+        <div class="article-rail-scroll space-y-8 overflow-y-auto pr-4">
+          <nav aria-label="All Categories">
+            <ul class="space-y-2 text-sm">
+              <li class="eyebrow mb-4 text-muted-foreground">All Categories</li>
+              {
+                categories.map((category) => (
+                  <li>
+                    <a
+                      href={`/category/${category.slug}/`}
+                      class:list={[
+                        'story-link',
+                        category.slug === post.data.category
+                          ? 'text-primary'
+                          : 'text-muted-foreground hover:text-foreground',
+                      ]}
+                    >
+                      {category.name}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </nav>
+
+          {
+            tags.length > 0 && (
+              <nav aria-labelledby="article-tags">
+                <p id="article-tags" class="eyebrow mb-4 text-muted-foreground">
+                  Tags
+                </p>
+                <ul class="flex flex-wrap gap-2">
+                  {tags.map((tag) => (
+                    <li>
+                      <a
+                        href={`/tag/${tag.slug}/`}
+                        class="button-quiet inline-flex px-2.5 py-1 font-mono text-[10px] tracking-[0.18em] uppercase"
+                      >
+                        {tag.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            )
+          }
+
+          {
+            toc.length > 0 && (
+              <nav aria-labelledby="article-toc">
+                <p id="article-toc" class="eyebrow mb-4 text-muted-foreground">
+                  Table of Contents
+                </p>
+                <ol class="space-y-3 text-sm">
+                  {toc.map((heading) => (
+                    <li>
+                      <a
+                        href={`#${heading.slug}`}
+                        class="block leading-snug text-muted-foreground transition-colors hover:text-primary"
+                      >
+                        {heading.text}
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            )
+          }
+        </div>
+      </aside>
+
+      <div class="min-w-0">
+        <div class="article-body">
+          <Content />
+        </div>
+
+        <div class="mt-10">
+          <ShareTrigger variant="button" />
+        </div>
+
+        <nav
+          class="rule-top mt-14 grid gap-x-8 gap-y-6 pt-5 sm:grid-cols-2"
+          aria-label="Previous and next articles"
+        >
+          <div>
+            {
+              previous && (
+                <a href={`/post/${previous.id}/`} class="story-tile group block">
+                  <span class="eyebrow text-muted-foreground">Previous</span>
+                  <span class="story-headline mt-2.5 block font-display text-xl leading-[1.14] font-bold text-balance">
+                    {previous.data.title}
+                  </span>
+                </a>
+              )
+            }
+          </div>
+          <div class="sm:border-l sm:border-border sm:pl-8">
+            {
+              next && (
+                <a href={`/post/${next.id}/`} class="story-tile group block">
+                  <span class="eyebrow text-muted-foreground">Next</span>
+                  <span class="story-headline mt-2.5 block font-display text-xl leading-[1.14] font-bold text-balance">
+                    {next.data.title}
+                  </span>
+                </a>
+              )
+            }
+          </div>
+        </nav>
+
+        <div class="mt-14">
+          <Newsletter variant="compact" />
+        </div>
+      </div>
+    </div>
+  </article>
+
+  {
+    related.length > 0 && (
+      <section class="reveal mx-auto max-w-7xl px-6 pt-16 lg:px-10">
+        <div class="section-rule rule-top" />
+        <div class="mt-4 mb-7 flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
+          <div class="max-w-xl">
+            <h2 class="font-display text-3xl leading-[0.98] font-extrabold md:text-[2.6rem]">
+              Keep reading
+            </h2>
+            <p class="mt-2.5 text-pretty text-sm leading-6 text-muted-foreground">
+              More from the same desk, and what ran alongside it.
+            </p>
+          </div>
+          <a
+            href="/all-news/"
+            class="button-quiet inline-flex min-h-9 items-center px-3.5 font-mono text-[10px] font-semibold tracking-[0.22em] uppercase"
+          >
+            All stories
+          </a>
+        </div>
+        <div class="grid-cards col-rules-3 grid gap-x-8 gap-y-10 md:grid-cols-3">
+          {related.map((entry) => (
+            <StoryTile post={entry} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <ShareSheet slot="after-footer" title={post.data.title} url={canonical.href} />
+</BaseLayout>
+
+<script>
+  import '../../scripts/share-sheet.js';
+</script>

@@ -1,0 +1,146 @@
+---
+import { shareTargets, glyphs } from '../lib/share';
+
+/**
+ * Native `<dialog>` share sheet. Target URLs are resolved at build time so the
+ * markup is complete without JavaScript; `src/scripts/share-sheet.js` only
+ * handles opening, the "More" reveal and copying the link.
+ */
+interface Props {
+  title: string;
+  url: string;
+}
+
+const { title, url } = Astro.props;
+
+const targets = shareTargets.filter((target) => !target.extra);
+const extras = shareTargets.filter((target) => target.extra);
+---
+
+<dialog id="share-sheet" class="sheet" aria-labelledby="share-sheet-title" data-share-sheet>
+  <div class="sheet__panel">
+    <div class="sheet__head">
+      <h2 id="share-sheet-title" class="font-display text-lg font-extrabold">Share this article</h2>
+      <button type="button" class="sheet__close" aria-label="Close sharing options" data-share-close>
+        <span class="sheet__glyph" aria-hidden="true">
+          <svg
+            width="18"
+            height="18"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 256 256"
+            fill="currentColor"
+          >
+            <path d={glyphs.close}></path>
+          </svg>
+        </span>
+      </button>
+    </div>
+
+    <ul class="sheet__targets">
+      {
+        targets.map((target) => (
+          <li>
+            <a
+              class="sheet__target"
+              style={`--brand:${target.brand}`}
+              href={target.href(title, url)}
+              target="_blank"
+              rel="noreferrer"
+              data-share-target
+            >
+              <span class="sheet__icon">
+                <span class="sheet__glyph" aria-hidden="true">
+                  <svg
+                    width="20"
+                    height="20"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 256 256"
+                    fill="currentColor"
+                  >
+                    <path d={target.icon} />
+                  </svg>
+                </span>
+              </span>
+              <span class="sheet__label">{target.label}</span>
+            </a>
+          </li>
+        ))
+      }
+      <li data-share-more-item>
+        <button type="button" class="sheet__target sheet__target--quiet" data-share-more>
+          <span class="sheet__icon">
+            <span class="sheet__glyph" aria-hidden="true">
+              <svg
+                width="20"
+                height="20"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 256 256"
+                fill="currentColor"
+              >
+                <path d={glyphs.more}></path>
+              </svg>
+            </span>
+          </span>
+          <span class="sheet__label">More</span>
+        </button>
+      </li>
+      {
+        extras.map((target) => (
+          <li hidden data-share-extra>
+            <a
+              class="sheet__target"
+              style={`--brand:${target.brand}`}
+              href={target.href(title, url)}
+              target="_blank"
+              rel="noreferrer"
+              data-share-target
+            >
+              <span class="sheet__icon">
+                <span class="sheet__glyph" aria-hidden="true">
+                  <svg
+                    width="20"
+                    height="20"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 256 256"
+                    fill="currentColor"
+                  >
+                    <path d={target.icon} />
+                  </svg>
+                </span>
+              </span>
+              <span class="sheet__label">{target.label}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="sheet__link">
+      <p class="eyebrow text-muted-foreground">Page link</p>
+      <div class="sheet__link-row">
+        <input
+          class="sheet__field"
+          type="text"
+          readonly
+          value={url}
+          aria-label="Page link"
+          data-share-url
+        />
+        <button type="button" class="sheet__copy" data-share-copy data-copy-url={url}>
+          <span class="sheet__glyph" aria-hidden="true">
+            <svg
+              width="14"
+              height="14"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 256 256"
+              fill="currentColor"
+            >
+              <path d={glyphs.copy}></path>
+            </svg>
+          </span>
+          <span aria-live="polite" data-share-copy-label>Copy link</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</dialog>

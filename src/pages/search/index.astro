@@ -1,0 +1,69 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Lucide from '../../components/Lucide.astro';
+import { site } from '../../data/site';
+
+/**
+ * Search desk. Results are rendered client-side from `/search-index.json`
+ * so the page works as a static build.
+ */
+---
+
+<BaseLayout
+  title={`Search Semnal | ${site.name}`}
+  description="Search Semnal stories across technology, AI, startups, markets, EVs, and science."
+>
+  <section class="mx-auto max-w-5xl px-5 pt-12 sm:px-6 lg:px-10">
+    <div class="border-b border-border pb-8">
+      <p class="font-mono text-xs font-bold uppercase tracking-[0.28em] text-primary">
+        Search desk
+      </p>
+      <h1 class="mt-3 font-display text-5xl leading-[0.95] font-extrabold text-balance md:text-6xl">
+        Search Semnal
+      </h1>
+      <p class="mt-4 max-w-2xl text-pretty text-lg text-muted-foreground">
+        Find reporting, analysis, and briefings by title, topic, category, tag, or author.
+      </p>
+    </div>
+
+    <form
+      action="/search/"
+      method="get"
+      role="search"
+      class="mt-8"
+      data-search-page-form
+    >
+      <label for="search-page-query" class="eyebrow mb-3 block text-muted-foreground">
+        Search query
+      </label>
+      <div class="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto]">
+        <div class="site-search-field min-h-14">
+          <Lucide name="search" class="h-5 w-5 text-muted-foreground" />
+          <input
+            id="search-page-query"
+            name="q"
+            type="search"
+            autocomplete="off"
+            enterkeyhint="search"
+            placeholder="Try AI, markets, EVs, chips..."
+            class="site-search-input text-base"
+            data-search-page-input
+          />
+        </div>
+        <button type="submit" class="button-primary min-h-14 px-6 font-semibold">Search</button>
+      </div>
+    </form>
+
+    <p class="mt-5 text-sm text-muted-foreground" aria-live="polite" data-search-page-summary>
+      Enter a keyword to search the newsroom.
+    </p>
+  </section>
+
+  <section class="mx-auto max-w-5xl px-5 pt-8 pb-20 sm:px-6 lg:px-10">
+    <div class="grid gap-5" data-search-page-results></div>
+  </section>
+</BaseLayout>
+
+<script>
+  import '../../scripts/search-page.js';
+</script>

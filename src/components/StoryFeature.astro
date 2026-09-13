@@ -1,0 +1,48 @@
+---
+import { Image } from 'astro:assets';
+import type { Post } from '../lib/posts';
+import { halfSizes, leadWidths } from '../lib/images';
+import { formatDateShort } from '../lib/format';
+import { authorBySlug } from '../data/authors';
+import CategoryChip from './CategoryChip.astro';
+
+/**
+ * Desk spotlight: the lead story of a desk block, rendered as a large
+ * photograph with the standfirst and byline beneath it.
+ */
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const author = authorBySlug.get(post.data.author);
+---
+
+<a href={`/post/${post.id}/`} class="story-tile group block">
+  <div class="story-frame aspect-[16/10]">
+    <Image
+      src={post.data.cover}
+      widths={leadWidths}
+      sizes={halfSizes}
+      alt={post.data.coverAlt}
+      loading="lazy"
+      decoding="async"
+      class="h-full w-full object-cover"
+    />
+  </div>
+  <div class="pt-5">
+    <CategoryChip category={post.data.category} />
+    <h3
+      class="story-headline mt-3 font-display text-2xl leading-[1.05] font-bold text-balance md:text-[2.1rem]"
+    >
+      {post.data.title}
+    </h3>
+    <p class="mt-3 max-w-xl text-pretty text-muted-foreground">{post.data.description}</p>
+    <p
+      class="mt-4 flex flex-wrap items-center justify-between gap-3 font-mono text-[11px] text-muted-foreground"
+    >
+      {author && <span class="text-foreground">By {author.name}</span>}
+      <span>{formatDateShort(post.data.publishedAt)} / {post.data.readMinutes} min</span>
+    </p>
+  </div>
+</a>

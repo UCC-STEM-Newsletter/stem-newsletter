@@ -1,0 +1,88 @@
+---
+import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import StoryTile from '../../components/StoryTile.astro';
+import { site, ARCHIVE_PAGE_SIZE } from '../../data/site';
+import { allPosts } from '../../lib/posts';
+
+/**
+ * Paginated archive: `/all-news/`, `/all-news/2/`, `/all-news/3/` …
+ */
+
+export const getStaticPaths = (async () => {
+  const posts = await allPosts();
+  const pageCount = Math.max(1, Math.ceil(posts.length / ARCHIVE_PAGE_SIZE));
+
+  return Array.from({ length: pageCount }, (_, index) => ({
+    params: { page: index === 0 ? undefined : String(index + 1) },
+    props: {
+      posts: posts.slice(index * ARCHIVE_PAGE_SIZE, (index + 1) * ARCHIVE_PAGE_SIZE),
+      currentPage: index + 1,
+      pageCount,
+      total: posts.length,
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { posts, currentPage, pageCount, total } = Astro.props;
+const heading = currentPage === 1 ? 'All News' : `All News - Page ${currentPage}`;
+const previousHref = currentPage === 2 ? '/all-news/' : `/all-news/${currentPage - 1}/`;
+---
+
+<BaseLayout
+  title={`${heading} | ${site.name}`}
+  description="Browse the latest Semnal stories across technology, AI, startups, markets, EVs, and science."
+>
+  <section class="mx-auto max-w-7xl px-6 pt-12 lg:px-10">
+    <div class="opener rule-top border-b border-border pt-4 pb-7">
+      <div>
+        <p class="eyebrow text-primary">Archive</p>
+        <h1 class="mt-2 font-display text-5xl leading-[0.95] font-extrabold md:text-6xl">
+          All News
+        </h1>
+        <p class="mt-4 max-w-2xl text-muted-foreground">
+          Page {currentPage} of {pageCount}, with {total} total stories.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-6 pt-10 lg:px-10">
+    <div class="grid-cards col-rules-3 grid gap-x-8 gap-y-10 md:grid-cols-3">
+      {posts.map((post) => <StoryTile post={post} />)}
+    </div>
+
+    <nav
+      class="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6"
+      aria-label="All news pagination"
+    >
+      {
+        currentPage > 1 ? (
+          <a
+            href={previousHref}
+            class="story-link eyebrow text-muted-foreground hover:text-primary"
+          >
+            Previous
+          </a>
+        ) : (
+          <span class="eyebrow text-muted-foreground/50">Previous</span>
+        )
+      }
+      <span class="eyebrow text-muted-foreground">Page {currentPage} / {pageCount}</span>
+      {
+        currentPage < pageCount ? (
+          <a
+            href={`/all-news/${currentPage + 1}/`}
+            class="story-link eyebrow text-muted-foreground hover:text-primary"
+          >
+            Next
+          </a>
+        ) : (
+          <span class="eyebrow text-muted-foreground/50">Next</span>
+        )
+      }
+    </nav>
+  </section>
+</BaseLayout>

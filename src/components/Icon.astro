@@ -1,0 +1,15 @@
+---
+/**
+ * Monochrome icon rendered through a CSS mask so it inherits `currentColor`.
+ * Assets live in `public/icons`.
+ */
+interface Props {
+  name: string;
+  class?: string;
+}
+
+const { name, class: className = 'h-4 w-4' } = Astro.props;
+---
+
+<span class={`icon ${className}`} style={`--icon: url('/icons/${name}.svg')`} aria-hidden="true"
+></span>
