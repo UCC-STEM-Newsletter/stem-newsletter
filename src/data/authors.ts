@@ -1,3 +1,11 @@
+/**
+ * The masthead.
+ *
+ * Only authors listed here get a profile page, and only if they have at least
+ * one published story — so adding a writer is a one-line change and an author
+ * never shows an empty page. A story's `author:` field refers to a `slug` here;
+ * the content check flags unknown authors.
+ */
 export interface Author {
   slug: string;
   name: string;
@@ -5,44 +13,19 @@ export interface Author {
   bio: string;
 }
 
-/** Editorial masthead. */
 export const authors: Author[] = [
   {
-    "slug": "amira-cole",
-    "name": "Amira Cole",
-    "role": "Startups Editor",
-    "bio": "Amira covers startup strategy, founder operations, and the changing mechanics of venture-backed company building."
+    slug: 'rafael-stone',
+    name: 'Rafael Stone',
+    role: 'Science Editor',
+    bio: 'Rafael writes about research, the environment, and the instruments that turn a hypothesis into a measurement.',
   },
   {
-    "slug": "elena-park",
-    "name": "Elena Park",
-    "role": "Mobility Editor",
-    "bio": "Elena follows electric mobility, charging infrastructure, fleet operations, and the industrial shift around transport."
+    slug: 'theo-grant',
+    name: 'Theo Grant',
+    role: 'Technology Editor',
+    bio: 'Theo covers computing and artificial intelligence, with an eye on what these systems actually cost to run and maintain.',
   },
-  {
-    "slug": "mara-ionescu",
-    "name": "Mara Ionescu",
-    "role": "Global Technology Editor",
-    "bio": "Mara reports on global technology policy, infrastructure, connectivity, and the institutions shaping digital markets."
-  },
-  {
-    "slug": "nadia-chen",
-    "name": "Nadia Chen",
-    "role": "Markets Analyst",
-    "bio": "Nadia tracks markets, capital flows, cloud spending, semiconductors, and the financial signals behind technology cycles."
-  },
-  {
-    "slug": "rafael-stone",
-    "name": "Rafael Stone",
-    "role": "Science Reporter",
-    "bio": "Rafael writes about science, research infrastructure, climate systems, quantum computing, and emerging lab-to-market signals."
-  },
-  {
-    "slug": "theo-grant",
-    "name": "Theo Grant",
-    "role": "AI Correspondent",
-    "bio": "Theo covers AI systems, model economics, enterprise adoption, and the infrastructure choices behind applied machine intelligence."
-  }
 ];
 
-export const authorBySlug = new Map(authors.map((a) => [a.slug, a]));
+export const authorBySlug = new Map(authors.map((author) => [author.slug, author]));

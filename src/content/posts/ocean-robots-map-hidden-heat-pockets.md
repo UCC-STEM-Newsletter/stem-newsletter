@@ -1,12 +1,11 @@
 ---
 title: "Ocean Robots Map Hidden Heat Pockets"
 description: "Autonomous vehicles are giving climate researchers a sharper view of subsurface temperature shifts."
-category: science-lab
+category: science
 author: rafael-stone
 publishedAt: 2026-06-24T00:00:00.000Z
-readMinutes: 1
 tags:
-  - ocean-tech
+  - research
   - climate
   - robotics
 cover: ../../assets/covers/cover.DdQXWSsz.jpg

@@ -88,7 +88,7 @@ if (searchPageForm && searchPageInput && searchPageResults && searchPageSummary)
       searchPageResults.innerHTML = `
           <div class="border border-border bg-card p-6">
             <h2 class="font-display text-2xl font-bold">No matching stories</h2>
-            <p class="mt-2 text-muted-foreground">Try a broader topic like AI, markets, chips, EVs, startup, science, or climate.</p>
+            <p class="mt-2 text-muted-foreground">Try a broader topic like quantum, climate, chips, robotics, or biology.</p>
           </div>
         `;
       return;

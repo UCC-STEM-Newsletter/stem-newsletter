@@ -10,7 +10,7 @@ export async function GET(context: APIContext) {
   return rss({
     title: site.name,
     description: site.description,
-    site: context.site ?? 'https://semnal.xocoweb.workers.dev',
+    site: context.site ?? 'https://example.com',
     // @astrojs/rss has no `language` option; the channel element is injected
     // verbatim so the feed matches the reference markup.
     customData: `<language>${site.localeShort}</language>`,

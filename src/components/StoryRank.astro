@@ -1,5 +1,5 @@
 ---
-import type { Post } from '../lib/posts';
+import { readingTime, type Post } from '../lib/posts';
 import { formatDateShort, rank } from '../lib/format';
 import CategoryChip from './CategoryChip.astro';
 
@@ -30,7 +30,7 @@ const { post, index } = Astro.props;
       >{post.data.title}</span
     >
     <span class="mt-2 block font-mono text-[11px] text-muted-foreground">
-      {formatDateShort(post.data.publishedAt)} / {post.data.readMinutes} min
+      {formatDateShort(post.data.publishedAt)} / {readingTime(post)} min
     </span>
   </span>
 </a>

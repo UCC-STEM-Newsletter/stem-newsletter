@@ -2,8 +2,8 @@
 import '../styles/global.css';
 import { site } from '../data/site';
 import { categories } from '../data/categories';
-import { allPosts, pickPosts } from '../lib/posts';
-import { home } from '../data/homepage';
+import { allPosts } from '../lib/posts';
+import { TICKER_LIMIT } from '../data/homepage';
 import SiteTopbar from '../components/SiteTopbar.astro';
 import LiveWire from '../components/LiveWire.astro';
 import SearchDialog from '../components/SearchDialog.astro';
@@ -33,7 +33,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 const socialImage = new URL(image, Astro.site);
 
 const posts = await allPosts();
-const ticker = pickPosts(posts, home.ticker);
+const ticker = posts.slice(0, TICKER_LIMIT);
 
 const schema = jsonLd ?? {
   '@context': 'https://schema.org',
@@ -68,7 +68,7 @@ const schema = jsonLd ?? {
       href="/fonts/geist/Geist-Variable-latin.woff2"
       crossorigin
     />
-    <link rel="alternate" type="application/rss+xml" title="Semnal RSS" href="/rss.xml" />
+    <link rel="alternate" type="application/rss+xml" title="Catalyst RSS" href="/rss.xml" />
 
     <meta property="og:locale" content={site.locale} />
     <meta property="og:type" content={ogType} />

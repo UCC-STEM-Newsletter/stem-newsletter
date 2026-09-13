@@ -1,14 +1,12 @@
 ---
 title: "Fusion Materials Team Reports Longer Wall Life"
 description: "Researchers are testing alloys that could endure harsher reactor conditions and reduce maintenance cycles."
-category: science-lab
+category: engineering
 author: rafael-stone
 publishedAt: 2026-06-30T00:00:00.000Z
-readMinutes: 1
 tags:
-  - fusion
-  - materials
   - energy
+  - materials
 cover: ../../assets/covers/cover.CDVQYjmC.jpg
 coverAlt: "Scientist looking through a microscope in a laboratory"
 coverCredit:

@@ -2,16 +2,20 @@
 /**
  * CSS coverage audit.
  *
+ *
  * Every class that appears in the built HTML should be defined by the built
  * stylesheet (or be a known state hook toggled by JavaScript). This catches
  * utility classes that Tailwind could not see because they were assembled
  * dynamically.
  *
- * Usage: node scripts/audit-css.mjs
+ * Usage: node scripts/check-css.mjs
  */
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
-import { DIST } from './lib/reference.mjs';
+import { fileURLToPath } from 'node:url';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const DIST = path.join(ROOT, 'dist');
 
 /**
  * Classes with no CSS rule by design: JS hooks, structural markers and utility

@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import type { Post } from '../lib/posts';
+import { readingTime, type Post } from '../lib/posts';
 import { formatDateShort } from '../lib/format';
 import { thumbSize } from '../lib/images';
 import CategoryChip from './CategoryChip.astro';
@@ -41,7 +41,7 @@ const { post, loading = 'eager' } = Astro.props;
       {post.data.title}
     </h3>
     <p class="mt-2 font-mono text-[11px] text-muted-foreground">
-      {formatDateShort(post.data.publishedAt)} / {post.data.readMinutes} min
+      {formatDateShort(post.data.publishedAt)} / {readingTime(post)} min
     </p>
   </div>
 </a>

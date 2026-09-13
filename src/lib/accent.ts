@@ -5,12 +5,10 @@
  * Tailwind scanner can see them; `accentClass` is only a lookup.
  */
 const accentClasses: Record<string, string> = {
-  global: 'text-global',
-  ai: 'text-ai',
-  market: 'text-market',
-  ev: 'text-ev',
   science: 'text-science',
-  startup: 'text-startup',
+  technology: 'text-technology',
+  engineering: 'text-engineering',
+  mathematics: 'text-mathematics',
 };
 
 export const accentClass = (accent: string | undefined): string =>

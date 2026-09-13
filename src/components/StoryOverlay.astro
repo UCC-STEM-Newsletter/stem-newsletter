@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import type { Post } from '../lib/posts';
+import { readingTime, type Post } from '../lib/posts';
 import { leadSizes, leadWidths } from '../lib/images';
 import { formatDateShort } from '../lib/format';
 import { authorBySlug } from '../data/authors';
@@ -44,7 +44,7 @@ const author = authorBySlug.get(post.data.author);
         {author && <span>By {author.name}</span>}
         <span aria-hidden="true">/</span>
         <span class="font-mono text-xs">
-          {formatDateShort(post.data.publishedAt)} / {post.data.readMinutes} min
+          {formatDateShort(post.data.publishedAt)} / {readingTime(post)} min
         </span>
       </p>
     </div>

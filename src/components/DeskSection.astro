@@ -1,6 +1,5 @@
 ---
 import type { Post } from '../lib/posts';
-import type { DeskLayout } from '../data/homepage';
 import { categoryBySlug } from '../data/categories';
 import StoryFeature from './StoryFeature.astro';
 import StoryMini from './StoryMini.astro';
@@ -9,31 +8,32 @@ import StoryTile from './StoryTile.astro';
 /**
  * A desk's homepage block.
  *
- * `spotlight` pairs one large lead with a stacked rail; `grid-3` and `grid-4`
- * lay every story out as an equal card.
+ * The layout is chosen from how many stories the desk actually has, so a new
+ * desk looks deliberate at two stories and expands into a spotlight once it has
+ * enough for one. Desks below the composition's minimum are not rendered at
+ * all — the page decides that, not this component.
  */
 interface Props {
   category: string;
-  layout: DeskLayout;
-  /** Stories to render, already limited to the layout capacity. */
+  /** Every story in the desk, used for the count note and the layout choice. */
   posts: Post[];
-  /** Total stories in the desk, used for the "05 stories" note. */
-  total: number;
 }
 
-const { category, layout, posts, total } = Astro.props;
+const { category, posts } = Astro.props;
 const meta = categoryBySlug.get(category);
 const name = meta?.name ?? category;
-const description = meta?.description ?? '';
+const total = posts.length;
 const count = String(total).padStart(2, '0');
 
-const gridClass =
-  layout === 'grid-4'
-    ? 'grid-cards col-rules-2-4 grid gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-4'
-    : 'grid-cards col-rules-3 grid gap-x-8 gap-y-10 md:grid-cols-3';
-
+// Five or more earns a spotlight: one feature plus a stacked rail.
+const spotlight = total >= 5;
 const feature = posts[0];
 const rest = posts.slice(1);
+
+const gridClass =
+  total === 2
+    ? 'grid-cards col-rules-2 grid gap-x-8 gap-y-10 md:grid-cols-2'
+    : 'grid-cards col-rules-3 grid gap-x-8 gap-y-10 md:grid-cols-3';
 ---
 
 <section class="mx-auto max-w-7xl px-5 pt-20 sm:px-6 lg:px-10">
@@ -44,7 +44,9 @@ const rest = posts.slice(1);
         <h2 class="font-display text-3xl leading-[0.98] font-extrabold text-balance md:text-[2.6rem]">
           {name}
         </h2>
-        <p class="mt-2.5 text-pretty text-sm leading-6 text-muted-foreground">{description}</p>
+        <p class="mt-2.5 text-pretty text-sm leading-6 text-muted-foreground">
+          {meta?.description}
+        </p>
       </div>
       <div class="flex items-center gap-4">
         <span class="eyebrow hidden text-muted-foreground sm:inline">{count} stories</span>
@@ -59,11 +61,11 @@ const rest = posts.slice(1);
   </div>
 
   {
-    layout === 'spotlight' && feature ? (
+    spotlight && feature ? (
       <div class="grid-cards grid gap-x-8 gap-y-8 lg:grid-cols-[1.15fr_0.85fr]">
         <StoryFeature post={feature} />
         <div class="lg:border-l lg:border-border lg:pl-8">
-          {rest.map((post) => (
+          {rest.slice(0, 4).map((post) => (
             <StoryMini post={post} />
           ))}
         </div>

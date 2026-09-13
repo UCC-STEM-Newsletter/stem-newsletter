@@ -1,52 +1,46 @@
+/**
+ * The four STEM desks, in the order they appear in the navigation, the footer,
+ * the desk index and the homepage.
+ *
+ * A desk only gets a homepage block once it has at least two stories, and an
+ * empty desk renders an explicit "no stories yet" state rather than a bare
+ * grid, so adding one later needs no layout work.
+ */
 export interface Category {
   slug: string;
   name: string;
   description: string;
-  /** Theme accent token used by `text-*` / `border-*` utilities. */
+  /** Theme accent token used by the `text-*` utilities. */
   accent: string;
 }
 
-/**
- * Desks in editorial order. This ordering drives the primary navigation, the
- * footer, the desk index and the homepage desk blocks.
- */
 export const categories: Category[] = [
   {
-    "slug": "global-dispatch",
-    "name": "Global Dispatch",
-    "description": "Policy, trade rules, and the infrastructure moving technology across borders.",
-    "accent": "global"
+    slug: 'science',
+    name: 'Science',
+    description:
+      'Research, experiments, and discoveries across biology, chemistry, physics, and the environment.',
+    accent: 'science',
   },
   {
-    "slug": "ai-frontier",
-    "name": "AI Frontier",
-    "description": "Model releases, inference economics, and the systems being wired around them.",
-    "accent": "ai"
+    slug: 'technology',
+    name: 'Technology',
+    description:
+      'Computing, artificial intelligence, software, and the systems shaping how we work and learn.',
+    accent: 'technology',
   },
   {
-    "slug": "market-pulse",
-    "name": "Market Pulse",
-    "description": "Capital flows, valuations, and the numbers behind the technology cycle.",
-    "accent": "market"
+    slug: 'engineering',
+    name: 'Engineering',
+    description: 'Hardware, robotics, materials, energy, and the built world.',
+    accent: 'engineering',
   },
   {
-    "slug": "ev-shift",
-    "name": "EV Shift",
-    "description": "Batteries, charging, and the industrial build-out behind electric transport.",
-    "accent": "ev"
+    slug: 'mathematics',
+    name: 'Mathematics',
+    description: 'Pure and applied mathematics, statistics, modelling, and data.',
+    accent: 'mathematics',
   },
-  {
-    "slug": "science-lab",
-    "name": "Science Lab",
-    "description": "Instruments, materials, and research edging out of the lab.",
-    "accent": "science"
-  },
-  {
-    "slug": "startup-watch",
-    "name": "Startup Watch",
-    "description": "Founders, funding, and the products finding their first real market.",
-    "accent": "startup"
-  }
 ];
 
-export const categoryBySlug = new Map(categories.map((c) => [c.slug, c]));
+export const categoryBySlug = new Map(categories.map((category) => [category.slug, category]));

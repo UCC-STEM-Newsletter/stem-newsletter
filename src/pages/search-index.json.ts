@@ -2,7 +2,7 @@ import type { APIContext } from 'astro';
 import { categories } from '../data/categories';
 import { tags as allTags } from '../data/tags';
 import { authorBySlug } from '../data/authors';
-import { allPosts } from '../lib/posts';
+import { allPosts, readingTime } from '../lib/posts';
 import { formatDateShort } from '../lib/format';
 
 /**
@@ -24,7 +24,7 @@ export async function GET(_context: APIContext) {
       author: authorBySlug.get(post.data.author)?.name ?? post.data.author,
       date: post.data.publishedAt.toISOString(),
       dateLabel: formatDateShort(post.data.publishedAt),
-      readMinutes: post.data.readMinutes,
+      readMinutes: readingTime(post),
       href: `/post/${post.id}/`,
       image: {
         src: post.data.cover.src,

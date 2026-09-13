@@ -1,14 +1,12 @@
 ---
 title: "Search Assistants Learn to Cite Before They Answer"
 description: "Publishers and enterprise buyers are pushing AI search products toward stronger source presentation."
-category: ai-frontier
+category: technology
 author: theo-grant
 publishedAt: 2026-06-21T00:00:00.000Z
-readMinutes: 1
 tags:
-  - search
-  - publishing
-  - trust
+  - artificial-intelligence
+  - computing
 cover: ../../assets/covers/cover.BuRhClQD.jpg
 coverAlt: "Humanoid robot wearing a conference badge"
 coverCredit:

@@ -1,26 +1,35 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { site } from '../data/site';
+import { authors } from '../data/authors';
 
 const sections = [
   {
-    heading: 'Editorial Direction',
-    body: 'Semnal tracks the forces reshaping technology, capital, energy, science, and global business. The theme is designed for concise reporting, useful context, and a homepage that can carry a busy daily news cycle.',
+    heading: 'What we are',
+    body: 'Catalyst is a student-led STEM publication. We write about science, technology, engineering, and mathematics — the research, the tools, and the people doing the work. We are independent and not affiliated with any institution.',
   },
   {
-    heading: 'Editorial Standards',
-    body: 'Stories should be timely, clearly credited, and useful to readers who want the signal without refreshing every dashboard, demo day, and regulatory filing.',
+    heading: 'How we publish',
+    body: 'We publish when there is something worth saying rather than to a schedule. A story goes up when it is ready, which means the front page changes slowly and the archive stays worth reading.',
+  },
+  {
+    heading: 'Editorial standards',
+    body: 'Everything we publish is written by a named student contributor and credited, including photography. We link to primary sources — papers, documentation, datasets — wherever one exists, and we correct mistakes in the open.',
+  },
+  {
+    heading: 'Write with us',
+    body: 'Catalyst is written by students. If you want to write about something you are studying, building, or trying to understand, get in touch — no prior publishing experience needed.',
   },
 ];
 ---
 
 <BaseLayout
   title={`About | ${site.name}`}
-  description="Learn about Semnal, the editorial voice, and the technology coverage readers can expect."
+  description="Catalyst is a student-led STEM publication covering science, technology, engineering, and mathematics."
 >
   <section class="mx-auto max-w-4xl px-6 pt-12 lg:px-10">
     <p class="eyebrow text-primary">Masthead</p>
-    <h1 class="mt-3 font-display text-5xl leading-[0.95] font-extrabold md:text-7xl">Semnal</h1>
+    <h1 class="mt-3 font-display text-5xl leading-[0.95] font-extrabold md:text-7xl">Catalyst</h1>
     <p class="mt-6 max-w-2xl text-pretty text-xl text-muted-foreground">{site.description}</p>
   </section>
 
@@ -33,5 +42,24 @@ const sections = [
         </div>
       ))
     }
+
+    <div class="border-t border-border pt-8">
+      <h2 class="font-display text-3xl font-bold tracking-tight">Who writes it</h2>
+      <ul class="mt-5 divide-y divide-border">
+        {
+          authors.map((author) => (
+            <li class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 py-3">
+              <a href={`/author/${author.slug}/`} class="story-link font-display text-lg font-bold">
+                {author.name}
+              </a>
+              <span class="text-sm text-muted-foreground">{author.role}</span>
+            </li>
+          ))
+        }
+      </ul>
+      <a href="/authors/" class="story-link mt-5 inline-block text-sm text-primary">
+        All contributors
+      </a>
+    </div>
   </section>
 </BaseLayout>

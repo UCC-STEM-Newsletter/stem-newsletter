@@ -1,14 +1,13 @@
 ---
 title: "New Microscope Spots Protein Folding in Motion"
 description: "A lab imaging technique could help drug researchers observe structural changes that were previously inferred."
-category: science-lab
+category: science
 author: rafael-stone
 publishedAt: 2026-06-10T00:00:00.000Z
-readMinutes: 1
 tags:
+  - research
   - biotech
   - imaging
-  - drug-discovery
 cover: ../../assets/covers/cover.D2mCuDwY.jpg
 coverAlt: "Cleanroom technicians working with lab samples and a tablet"
 coverCredit:

@@ -1,14 +1,12 @@
 ---
 title: "Chiplet Startups Pitch Cooler AI Racks"
 description: "A new hardware cohort is designing around thermal limits as data centers search for denser compute."
-category: ai-frontier
+category: engineering
 author: theo-grant
 publishedAt: 2026-06-27T00:00:00.000Z
-readMinutes: 1
 tags:
-  - chiplets
-  - data-centers
   - hardware
+  - computing
 cover: ../../assets/covers/cover.DqStyfuQ.jpg
 coverAlt: "Laptop showing an AI code editor website"
 coverCredit:

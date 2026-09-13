@@ -8,15 +8,16 @@ import { pluralize } from '../../lib/format';
 /** Contributors index: `/authors/` */
 
 const posts = await allPosts();
-const rows = authors.map((author) => ({
-  author,
-  count: postsByAuthor(posts, author.slug).length,
-}));
+// Only contributors who have published something; an empty profile page is a
+// dead end for a reader.
+const rows = authors
+  .map((author) => ({ author, count: postsByAuthor(posts, author.slug).length }))
+  .filter((row) => row.count > 0);
 ---
 
 <BaseLayout
   title={`Authors | ${site.name}`}
-  description="Meet the writers and editors publishing analysis on Semnal."
+  description="Meet the students writing for Catalyst."
 >
   <section class="mx-auto max-w-7xl px-6 pt-12 lg:px-10">
     <div class="opener rule-top border-b border-border pt-4 pb-7">
@@ -25,7 +26,7 @@ const rows = authors.map((author) => ({
         Contributors
       </h1>
       <p class="mt-4 max-w-2xl text-muted-foreground">
-        Browse author profiles and their latest reporting across Semnal.
+        Browse contributor profiles and their published work.
       </p>
     </div>
   </section>

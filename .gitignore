@@ -7,9 +7,6 @@ dist/
 # generated types
 .astro/
 
-# reference-site cache used by `npm run import:content` and the verify scripts
-.scrape-cache/
-
 # logs
 *.log
 npm-debug.log*

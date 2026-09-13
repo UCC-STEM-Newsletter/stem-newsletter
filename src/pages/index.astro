@@ -8,60 +8,68 @@ import StoryRank from '../components/StoryRank.astro';
 import DeskSection from '../components/DeskSection.astro';
 import Newsletter from '../components/Newsletter.astro';
 import { site, deskIndex } from '../data/site';
-import { home, editorialBriefing, deskCapacity } from '../data/homepage';
+import {
+  compositionFor,
+  editorialBriefing,
+  picks,
+  PICKS_MINIMUM,
+  TOPIC_LIMIT,
+} from '../data/homepage';
 import { categories } from '../data/categories';
-import { tags } from '../data/tags';
-import { allPosts, pickPosts, postsByCategory, fillPosts } from '../lib/posts';
+import { allPosts, leadPost, pickPosts, postsByCategory, takeUnused, usedTags } from '../lib/posts';
 import { formatDateShort } from '../lib/format';
 import { accentClass } from '../lib/accent';
 
 const posts = await allPosts();
 
+// How much front page the archive can fill. Everything below clamps to what
+// actually exists, so the same code serves six stories and two hundred.
+const plan = compositionFor(posts.length);
+
 // --- top of the page ---------------------------------------------------
-// A curated lead, a two-up rail, the "Latest" column and the "Most read"
-// chart together consume the newest stories; everything after that is either
-// a desk block or the closing catch-all grid.
-const lead = pickPosts(posts, [home.lead], 1)[0] ?? posts[0];
-const secondary = fillPosts(posts, pickPosts(posts, home.secondary), 4, new Set([lead.id]));
-const latest = fillPosts(
-  posts,
-  pickPosts(posts, home.latest),
-  5,
-  new Set([lead.id, ...secondary.map((post) => post.id)]),
-);
-const usedAbove = new Set([lead.id, ...secondary.map((p) => p.id), ...latest.map((p) => p.id)]);
-const mostRead = fillPosts(posts, pickPosts(posts, home.mostRead), 6, usedAbove);
+// Lead, supporting tiles and the Latest rail. `used` accumulates as we go so
+// no story appears twice in the same rail.
+const used = new Set<string>();
 
-/** How many stories the four blocks above consume from the top of the feed. */
-const topCount = 1 + secondary.length + latest.length + mostRead.length;
-const more = posts.slice(topCount, topCount + home.moreLimit);
+const lead = leadPost(posts);
+if (lead) used.add(lead.id);
 
-const topics = tags.slice(0, home.topicLimit);
+const tiles = takeUnused(posts, plan.tiles, used);
+for (const post of tiles) used.add(post.id);
+
+const latest = takeUnused(posts, plan.latest, used);
+for (const post of latest) used.add(post.id);
+
+// --- editor's picks ----------------------------------------------------
+// A curated list minus anything already shown above. Skipped entirely when too
+// few picks survive, rather than rendering a stub chart.
+const picked = pickPosts(posts, picks)
+  .filter((post) => !used.has(post.id))
+  .slice(0, plan.picks);
+const showPicks = picked.length >= PICKS_MINIMUM;
+if (showPicks) for (const post of picked) used.add(post.id);
 
 // --- desk blocks -------------------------------------------------------
-const desks = home.desks.map((desk) => {
-  const all = postsByCategory(posts, desk.category);
-  return {
-    category: desk.category,
-    layout: desk.layout,
-    total: all.length,
-    posts: all.slice(0, deskCapacity[desk.layout]),
-  };
-});
+// A desk needs a couple of stories before it earns a section of its own.
+const desks = categories
+  .map((category) => ({ category: category.slug, posts: postsByCategory(posts, category.slug) }))
+  .filter((desk) => desk.posts.length >= plan.deskMinimum);
 
-// The front page runs the desk index after the first desk block and the
-// newsletter before the final three, matching the reference layout.
-const [firstDesk, ...middleDesks] = desks;
-const tailDesks = middleDesks.slice(2);
+// --- closing grid ------------------------------------------------------
+const remaining = posts.filter((post) => !used.has(post.id));
+const closing = plan.closing === 0 ? remaining : remaining.slice(0, plan.closing);
+// Tier A shows everything left; later tiers only bother with a full row.
+const showClosing = plan.closing === 0 ? closing.length > 0 : closing.length >= 4;
 
-const deskIndexRows = categories.map((category) => {
-  const categoryPosts = postsByCategory(posts, category.slug);
-  return {
-    category,
-    count: String(categoryPosts.length).padStart(2, '0'),
-    lead: categoryPosts[0],
-  };
-});
+// --- rails -------------------------------------------------------------
+const topics = usedTags(posts).slice(0, TOPIC_LIMIT);
+
+const deskRows = categories
+  .map((category) => {
+    const categoryPosts = postsByCategory(posts, category.slug);
+    return { category, count: categoryPosts.length, lead: categoryPosts[0] };
+  })
+  .filter((row) => row.count > 0);
 ---
 
 <BaseLayout title={site.title} description={site.description} image="/og-image.png">
@@ -70,22 +78,34 @@ const deskIndexRows = categories.map((category) => {
   <section class="mx-auto max-w-7xl px-5 pt-8 sm:px-6 lg:px-10">
     <div class="grid gap-x-8 gap-y-12 lg:grid-cols-[minmax(0,1fr)_340px]">
       <div class="opener space-y-10">
-        <StoryOverlay post={lead} />
-        <div class="col-rules-2 grid gap-x-8 gap-y-10 md:grid-cols-2">
-          {secondary.map((post) => <StoryTile post={post} loading="eager" />)}
-        </div>
+        {lead && <StoryOverlay post={lead} />}
+        {
+          tiles.length > 0 && (
+            <div class="col-rules-2 grid gap-x-8 gap-y-10 md:grid-cols-2">
+              {tiles.map((post) => (
+                <StoryTile post={post} loading="eager" />
+              ))}
+            </div>
+          )
+        }
       </div>
 
       <div class="opener space-y-10 lg:border-l lg:border-border lg:pl-8">
-        <aside>
-          <div class="rule-top pt-3">
-            <div class="mb-1 flex items-baseline justify-between gap-4">
-              <h2 class="font-display text-xl font-extrabold">Latest</h2>
-              <span class="eyebrow text-primary animate-pulse-dot">Live</span>
-            </div>
-            {latest.map((post) => <StoryMini post={post} />)}
-          </div>
-        </aside>
+        {
+          latest.length > 0 && (
+            <aside>
+              <div class="rule-top pt-3">
+                <div class="mb-1 flex items-baseline justify-between gap-4">
+                  <h2 class="font-display text-xl font-extrabold">Latest</h2>
+                  <span class="eyebrow text-primary animate-pulse-dot">Live</span>
+                </div>
+                {latest.map((post) => (
+                  <StoryMini post={post} />
+                ))}
+              </div>
+            </aside>
+          )
+        }
 
         <aside class="rule-top flex flex-col pt-3">
           <p class="eyebrow text-primary">{editorialBriefing.eyebrow}</p>
@@ -103,113 +123,128 @@ const deskIndexRows = categories.map((category) => {
           </a>
         </aside>
 
-        <nav class="rule-top pt-3" aria-labelledby="home-topics-heading">
-          <p id="home-topics-heading" class="eyebrow text-muted-foreground">Topics in play</p>
-          <ul class="mt-4 flex flex-wrap gap-2">
-            {
-              topics.map((tag) => (
-                <li>
-                  <a
-                    href={`/tag/${tag.slug}/`}
-                    class="button-quiet inline-flex min-h-8 items-center px-2.5 font-mono text-[10px] tracking-[0.16em] uppercase"
-                  >
-                    {tag.name}
-                  </a>
-                </li>
-              ))
-            }
-          </ul>
-        </nav>
+        {
+          topics.length > 0 && (
+            <nav class="rule-top pt-3" aria-labelledby="home-topics-heading">
+              <p id="home-topics-heading" class="eyebrow text-muted-foreground">
+                Topics in play
+              </p>
+              <ul class="mt-4 flex flex-wrap gap-2">
+                {topics.map((tag) => (
+                  <li>
+                    <a
+                      href={`/tag/${tag.slug}/`}
+                      class="button-quiet inline-flex min-h-8 items-center px-2.5 font-mono text-[10px] tracking-[0.16em] uppercase"
+                    >
+                      {tag.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )
+        }
       </div>
     </div>
   </section>
 
-  <div class="reveal pt-20">
-    <section class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-10" aria-labelledby="popular-heading">
-      <SectionHeading
-        heading="Most read"
-        blurb="What the newsroom's readers opened most in the last seven days."
-        headingId="popular-heading"
-        actionLabel="View archive"
-        actionHref="/all-news/"
-      />
-      <div class="grid-cards col-rules-3 grid gap-x-8 md:grid-cols-3">
-        {mostRead.map((post, index) => <StoryRank post={post} index={index} />)}
+  {
+    showPicks && (
+      <div class="reveal pt-20">
+        <section class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-10" aria-labelledby="picks-heading">
+          <SectionHeading
+            heading="Editor's picks"
+            blurb="Stories the desk keeps coming back to, chosen by the editors."
+            headingId="picks-heading"
+            actionLabel="Full archive"
+            actionHref="/all-news/"
+          />
+          <div class="grid-cards col-rules-3 grid gap-x-8 gap-y-8 md:grid-cols-3">
+            {picked.map((post, index) => (
+              <StoryRank post={post} index={index} />
+            ))}
+          </div>
+        </section>
       </div>
-    </section>
-  </div>
+    )
+  }
 
-  <DeskSection {...firstDesk} />
+  {desks.map((desk) => <DeskSection category={desk.category} posts={desk.posts} />)}
 
-  <div class="reveal pt-20">
-    <section class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-10" aria-labelledby="desk-index-heading">
-      <SectionHeading
-        heading={deskIndex.heading}
-        blurb={deskIndex.blurb}
-        headingId="desk-index-heading"
-        actionLabel="Full archive"
-        actionHref="/all-news/"
-      />
-      <ul class="grid-cards col-rules-3 grid gap-x-8 md:grid-cols-3">
-        {
-          deskIndexRows.map((row) => (
-            <li class="border-t border-border py-4">
-              <div class="flex items-baseline justify-between gap-3">
-                <a
-                  href={`/category/${row.category.slug}/`}
-                  class={`eyebrow story-link ${accentClass(row.category.accent)}`}
-                >
-                  {row.category.name}
-                </a>
-                <span class="font-mono text-[11px] text-muted-foreground">{row.count}</span>
-              </div>
-              {row.lead && (
-                <a href={`/post/${row.lead.id}/`} class="story-tile group mt-2.5 block">
-                  <p class="story-headline font-display text-base leading-[1.16] font-bold text-balance">
-                    {row.lead.data.title}
-                  </p>
-                  <p class="mt-2 font-mono text-[11px] text-muted-foreground">
-                    {formatDateShort(row.lead.data.publishedAt)}
-                  </p>
-                </a>
-              )}
-            </li>
-          ))
-        }
-      </ul>
-    </section>
-  </div>
+  {
+    deskRows.length > 1 && (
+      <div class="reveal pt-20">
+        <section
+          class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-10"
+          aria-labelledby="desk-index-heading"
+        >
+          <SectionHeading
+            heading={deskIndex.heading}
+            blurb={deskIndex.blurb}
+            headingId="desk-index-heading"
+            actionLabel="All stories"
+            actionHref="/all-news/"
+          />
+          <ul class="grid-cards col-rules-3 grid gap-x-8 md:grid-cols-3">
+            {deskRows.map((row) => (
+              <li class="border-t border-border py-4">
+                <div class="flex items-baseline justify-between gap-3">
+                  <a
+                    href={`/category/${row.category.slug}/`}
+                    class={`eyebrow story-link ${accentClass(row.category.accent)}`}
+                  >
+                    {row.category.name}
+                  </a>
+                  <span class="font-mono text-[11px] text-muted-foreground">
+                    {String(row.count).padStart(2, '0')}
+                  </span>
+                </div>
+                {row.lead && (
+                  <a href={`/post/${row.lead.id}/`} class="story-tile group mt-2.5 block">
+                    <p class="story-headline font-display text-base leading-[1.16] font-bold text-balance">
+                      {row.lead.data.title}
+                    </p>
+                    <p class="mt-2 font-mono text-[11px] text-muted-foreground">
+                      {formatDateShort(row.lead.data.publishedAt)}
+                    </p>
+                  </a>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
+    )
+  }
 
-  {middleDesks.slice(0, 2).map((desk) => <DeskSection {...desk} />)}
-
-  {/* The reference layout keeps an empty spacer section here; it carries the
-      6rem gap that separates the desk blocks from the newsletter band. */}
   <section class="reveal mt-24"></section>
   <Newsletter id="newsletter" />
 
-  {tailDesks.map((desk) => <DeskSection {...desk} />)}
-
-  <section class="mx-auto max-w-7xl px-5 pt-20 sm:px-6 lg:px-10">
-    <SectionHeading
-      heading="More from the newsroom"
-      blurb="Everything else the desks filed, newest first."
-      actionLabel="All news"
-      actionHref="/all-news/"
-    />
-    <div class="mb-9 flex flex-wrap gap-2">
-      {
-        categories.map((category) => (
-          <a
-            href={`/category/${category.slug}/`}
-            class="button-quiet inline-flex min-h-8 items-center px-3 font-mono text-[10px] tracking-[0.18em] uppercase"
-          >
-            {category.name}
-          </a>
-        ))
-      }
-    </div>
-    <div class="grid-cards col-rules-2-4 grid gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-4">
-      {more.map((post) => <StoryTile post={post} />)}
-    </div>
-  </section>
+  {
+    showClosing && (
+      <section class="mx-auto max-w-7xl px-5 pt-20 sm:px-6 lg:px-10">
+        <SectionHeading
+          heading={plan.tier === 'A' ? 'All stories' : 'More from the desks'}
+          blurb="Everything else we have published, newest first."
+          actionLabel="Archive"
+          actionHref="/all-news/"
+        />
+        <div class="mb-9 flex flex-wrap gap-2">
+          {categories.map((category) => (
+            <a
+              href={`/category/${category.slug}/`}
+              class="button-quiet inline-flex min-h-8 items-center px-3 font-mono text-[10px] tracking-[0.18em] uppercase"
+            >
+              {category.name}
+            </a>
+          ))}
+        </div>
+        <div class="grid-cards col-rules-2-4 grid gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-4">
+          {closing.map((post) => (
+            <StoryTile post={post} />
+          ))}
+        </div>
+      </section>
+    )
+  }
 </BaseLayout>

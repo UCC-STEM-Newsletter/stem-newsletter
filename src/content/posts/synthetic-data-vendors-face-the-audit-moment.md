@@ -1,14 +1,12 @@
 ---
 title: "Synthetic Data Vendors Face the Audit Moment"
 description: "Buyers want proof that generated datasets improve model behavior without leaking sensitive patterns."
-category: ai-frontier
+category: technology
 author: theo-grant
 publishedAt: 2026-06-30T00:00:00.000Z
-readMinutes: 1
 tags:
+  - artificial-intelligence
   - data
-  - governance
-  - model-quality
 cover: ../../assets/covers/cover.DP-2Il3R.jpg
 coverAlt: "Humanoid robot with a blue lanyard and badge"
 coverCredit:

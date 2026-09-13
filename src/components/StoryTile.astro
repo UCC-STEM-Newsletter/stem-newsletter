@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import type { Post } from '../lib/posts';
+import { readingTime, type Post } from '../lib/posts';
 import { tileSizes, tileWidths } from '../lib/images';
 import { formatDateShort } from '../lib/format';
 import CategoryChip from './CategoryChip.astro';
@@ -42,7 +42,7 @@ const { post, headingLevel: Heading = 'h3', loading = 'lazy' } = Astro.props;
       class="mt-auto flex items-center justify-between gap-3 pt-3 font-mono text-[11px] text-muted-foreground"
     >
       <span>{formatDateShort(post.data.publishedAt)}</span>
-      <span>{post.data.readMinutes} min</span>
+      <span>{readingTime(post)} min</span>
     </p>
   </div>
 </a>

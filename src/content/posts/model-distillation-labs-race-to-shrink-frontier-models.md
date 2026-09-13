@@ -1,13 +1,11 @@
 ---
 title: "Model Distillation Labs Race to Shrink Frontier Models"
 description: "AI teams are turning large-model behavior into smaller systems that can run cheaper, faster, and closer to customers."
-category: ai-frontier
+category: technology
 author: theo-grant
 publishedAt: 2026-06-19T00:00:00.000Z
-readMinutes: 1
 tags:
-  - ai-infrastructure
-  - inference
+  - artificial-intelligence
   - computing
 cover: ../../assets/covers/cover.DAXtw1cX.jpg
 coverAlt: "Blue microchip mounted on a detailed electronic circuit board"

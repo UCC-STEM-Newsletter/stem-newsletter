@@ -1,5 +1,5 @@
 {
-  "name": "stem-newsletter",
+  "name": "catalyst",
   "type": "module",
   "version": "0.0.1",
   "private": true,
@@ -11,12 +11,11 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "astro": "astro",
-    "import:content": "node scripts/import-content.mjs",
-    "verify:parity": "node scripts/compare.mjs",
-    "verify:css": "node scripts/audit-css.mjs",
-    "verify:structure": "node scripts/compare-structure.mjs",
-    "verify": "npm run check && npm run build && npm run verify:parity && npm run verify:structure && npm run verify:css"
+    "check:content": "node scripts/check-content.mjs",
+    "check:css": "node scripts/check-css.mjs",
+    "verify": "npm run check && npm run check:content && npm run build && npm run check:css",
+    "og": "node scripts/make-og-image.mjs",
+    "astro": "astro"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",
@@ -32,5 +31,6 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "typescript": "^6.0.3"
-  }
+  },
+  "description": "Catalyst \u2014 a student-led STEM publication. Astro + Tailwind."
 }

@@ -1,14 +1,12 @@
 ---
 title: "AI Agents Move From Demos to Back-Office Work"
 description: "Finance, support, and operations teams are adopting constrained agents with narrow permissions and clear audit trails."
-category: ai-frontier
+category: technology
 author: theo-grant
 publishedAt: 2026-07-04T00:00:00.000Z
-readMinutes: 1
 tags:
-  - agents
-  - enterprise
-  - automation
+  - artificial-intelligence
+  - data
 cover: ../../assets/covers/cover.p0E0Mjsm.jpg
 coverAlt: "Laptop on a desk showing an AI workspace screen"
 coverCredit:

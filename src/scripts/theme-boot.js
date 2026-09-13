@@ -6,7 +6,7 @@
  * timelines.
  */
 (() => {
-  const storageKey = 'semnal-theme';
+  const storageKey = 'catalyst-theme';
   const root = document.documentElement;
   const defaultTheme = 'light';
   let storedTheme;

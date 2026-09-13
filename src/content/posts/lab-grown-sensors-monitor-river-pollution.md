@@ -1,12 +1,12 @@
 ---
 title: "Lab-Grown Sensors Monitor River Pollution"
 description: "New bio-inspired sensors promise cheaper, more frequent readings for industrial runoff and water quality."
-category: science-lab
+category: science
 author: rafael-stone
 publishedAt: 2026-07-07T00:00:00.000Z
-readMinutes: 1
+featured: true
 tags:
-  - sensors
+  - research
   - climate
   - biotech
 cover: ../../assets/covers/cover.BpUeRAe-.jpg

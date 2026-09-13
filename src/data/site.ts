@@ -1,15 +1,21 @@
 /**
- * Publication-wide configuration: masthead copy, navigation, footer columns
- * and the social/feed links.
+ * Publication-wide configuration for Catalyst.
+ *
+ * Catalyst is a student-led STEM publication: science, technology, engineering
+ * and mathematics. It publishes when there is something worth saying rather
+ * than on a fixed schedule, so nothing here assumes a daily cadence.
+ *
+ * NOTE: the social links and contact address below are placeholders — swap them
+ * for the real accounts before launch.
  */
 
 export const site = {
-  name: 'Semnal',
-  title: 'Semnal - Technology, startups, AI, markets, EVs, and science',
-  tagline: 'Technology, markets, and science in motion',
+  name: 'Catalyst',
+  title: 'Catalyst — Science, technology, engineering, and mathematics',
+  tagline: 'Science, technology, engineering, and mathematics',
   description:
-    'A modern editorial news theme for technology, startups, AI, business, electric mobility, science, and markets.',
-  publisher: 'Example Editorial Team',
+    'Catalyst is a student-led STEM publication: reporting on science, technology, engineering, and mathematics from the people doing the work.',
+  publisher: 'Catalyst',
   locale: 'en_US',
   localeShort: 'en-us',
   social: {
@@ -26,7 +32,7 @@ export const footerColumns = [
     links: [
       { label: 'About', href: '/about/' },
       { label: 'Contact', href: '/contact/' },
-      { label: 'Advertise', href: '/contact/' },
+      { label: 'Write for us', href: '/contact/' },
       { label: 'Newsletter', href: '/#newsletter' },
       { label: 'Privacy', href: '/privacy/' },
     ],
@@ -34,7 +40,7 @@ export const footerColumns = [
   {
     heading: 'Resources',
     links: [
-      { label: 'All News', href: '/all-news/' },
+      { label: 'All stories', href: '/all-news/' },
       { label: 'Authors', href: '/authors/' },
       { label: 'RSS', href: '/rss.xml' },
       { label: 'Robots', href: '/robots.txt' },
@@ -44,9 +50,9 @@ export const footerColumns = [
 ] as const;
 
 export const newsletter = {
-  heading: 'A smarter daily read on technology and capital.',
-  body: 'One concise editorial briefing on AI, startups, markets, EVs, science, and the global technology shifts underneath them.',
-  note: 'Free. One email a day, no partner sends. Unsubscribe in a click.',
+  heading: 'STEM reporting, straight to your inbox.',
+  body: 'Student-written stories on science, technology, engineering, and mathematics — sent when there is something worth reading, not on a schedule.',
+  note: 'Free. No fixed cadence, no partner sends. Unsubscribe in a click.',
 } as const;
 
 export const deskIndex = {
@@ -54,5 +60,8 @@ export const deskIndex = {
   blurb: 'Every desk, its story count, and the piece it is leading with right now.',
 } as const;
 
-/** Number of stories per archive page. */
-export const ARCHIVE_PAGE_SIZE = 12;
+/**
+ * Stories per archive page. Nine keeps the three-column grid on whole rows and
+ * means pagination only appears once the archive is worth paging.
+ */
+export const ARCHIVE_PAGE_SIZE = 9;

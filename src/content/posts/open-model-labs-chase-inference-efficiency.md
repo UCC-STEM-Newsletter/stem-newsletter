@@ -1,14 +1,12 @@
 ---
 title: "Open Model Labs Chase Inference Efficiency"
 description: "The latest model race is less about benchmark shock and more about serving useful answers at lower cost."
-category: ai-frontier
+category: technology
 author: theo-grant
 publishedAt: 2026-07-06T00:00:00.000Z
-readMinutes: 1
 tags:
-  - open-models
-  - inference
-  - ai-infrastructure
+  - artificial-intelligence
+  - computing
 cover: ../../assets/covers/cover.DOyprhCN.jpg
 coverAlt: "Laptop showing a responsible AI writing website"
 coverCredit:

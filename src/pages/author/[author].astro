@@ -12,10 +12,15 @@ import { pluralize } from '../../lib/format';
 export const getStaticPaths = (async () => {
   const posts = await allPosts();
 
-  return authors.map((author) => ({
-    params: { author: author.slug },
-    props: { author: author.slug, posts: postsByAuthor(posts, author.slug) },
-  }));
+  // An author with nothing published has nothing to show, so no page is
+  // generated for them — adding a story publishes their profile automatically.
+  return authors
+    .map((author) => ({ author, posts: postsByAuthor(posts, author.slug) }))
+    .filter((entry) => entry.posts.length > 0)
+    .map((entry) => ({
+      params: { author: entry.author.slug },
+      props: { author: entry.author.slug, posts: entry.posts },
+    }));
 }) satisfies GetStaticPaths;
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
@@ -27,7 +32,7 @@ const name = meta?.name ?? author;
 
 <BaseLayout
   title={`${name} - Author | ${site.name}`}
-  description={`${name}, ${meta?.role} at Semnal. ${meta?.bio}`}
+  description={`${name}, ${meta?.role} at Catalyst. ${meta?.bio}`}
   jsonLd={{
     '@context': 'https://schema.org',
     '@type': 'Person',

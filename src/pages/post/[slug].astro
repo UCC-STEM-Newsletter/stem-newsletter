@@ -13,7 +13,7 @@ import { site } from '../../data/site';
 import { categories } from '../../data/categories';
 import { tagBySlug } from '../../data/tags';
 import { authorBySlug } from '../../data/authors';
-import { allPosts, adjacentPosts, postsByCategory } from '../../lib/posts';
+import { allPosts, adjacentPosts, postsByCategory, readingTime } from '../../lib/posts';
 import { formatDate, isoDate } from '../../lib/format';
 import { leadWidths, articleSizes } from '../../lib/images';
 
@@ -59,7 +59,7 @@ const coverUrl = new URL(post.data.cover.src, Astro.site);
     image: coverUrl.href,
     datePublished: post.data.publishedAt.toISOString(),
     dateModified: post.data.publishedAt.toISOString(),
-    timeRequired: `PT${post.data.readMinutes}M`,
+    timeRequired: `PT${readingTime(post)}M`,
     author: { '@type': 'Person', name: author?.name ?? post.data.author },
     publisher: { '@type': 'Organization', name: site.publisher },
     mainEntityOfPage: canonical.href,
@@ -103,7 +103,7 @@ const coverUrl = new URL(post.data.cover.src, Astro.site);
           </time>
           <span class="text-muted-foreground/50" aria-hidden="true">/</span>
           <span class="inline-flex min-w-0 items-center gap-1.5 text-muted-foreground">
-            <Lucide name="clock" class="h-3 w-3" />{post.data.readMinutes} min read
+            <Lucide name="clock" class="h-3 w-3" />{readingTime(post)} min read
           </span>
         </div>
         <ShareTrigger variant="inline" />

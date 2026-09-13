@@ -123,17 +123,12 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-  --color-hot: var(--hot);
-  --color-lime: var(--lime);
-  --color-violet-glow: var(--violet-glow);
 
-  /* Desk accents — one per category. */
-  --color-global: var(--global);
-  --color-ai: var(--ai);
-  --color-market: var(--market);
-  --color-ev: var(--ev);
+  /* Desk accents — one per STEM desk. */
   --color-science: var(--science);
-  --color-startup: var(--startup);
+  --color-technology: var(--technology);
+  --color-engineering: var(--engineering);
+  --color-mathematics: var(--mathematics);
 
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
@@ -155,16 +150,11 @@
   --muted-foreground: oklch(45.5% 0.017 262);
   --primary: oklch(47.5% 0.175 258);
   --primary-foreground: oklch(99% 0 0);
-  --hot: oklch(47.5% 0.175 258);
-  --lime: oklch(48% 0.14 154);
-  --violet-glow: oklch(49% 0.17 292);
 
-  --global: oklch(47.5% 0.175 258);
-  --ai: oklch(46.5% 0.135 224);
-  --market: oklch(44% 0.13 155);
-  --ev: oklch(47.5% 0.125 62);
   --science: oklch(47.5% 0.16 302);
-  --startup: oklch(49% 0.165 28);
+  --technology: oklch(46.5% 0.135 224);
+  --engineering: oklch(47.5% 0.125 62);
+  --mathematics: oklch(44% 0.13 155);
 
   --border: oklch(24% 0.02 262 / 0.13);
   --border-strong: oklch(24% 0.02 262 / 0.26);
@@ -191,16 +181,11 @@
   --muted-foreground: oklch(72% 0.013 265);
   --primary: oklch(71.5% 0.155 251);
   --primary-foreground: oklch(15% 0.01 265);
-  --hot: oklch(71.5% 0.155 251);
-  --lime: oklch(78% 0.18 153);
-  --violet-glow: oklch(78% 0.16 302);
 
-  --global: oklch(73% 0.15 251);
-  --ai: oklch(79% 0.13 222);
-  --market: oklch(79% 0.165 154);
-  --ev: oklch(83% 0.155 83);
   --science: oklch(79% 0.16 302);
-  --startup: oklch(77% 0.16 32);
+  --technology: oklch(79% 0.13 222);
+  --engineering: oklch(83% 0.155 83);
+  --mathematics: oklch(79% 0.165 154);
 
   --border: oklch(100% 0 0 / 0.11);
   --border-strong: oklch(100% 0 0 / 0.22);
@@ -224,16 +209,11 @@
     --muted-foreground: oklch(72% 0.013 265);
     --primary: oklch(71.5% 0.155 251);
     --primary-foreground: oklch(15% 0.01 265);
-    --hot: oklch(71.5% 0.155 251);
-    --lime: oklch(78% 0.18 153);
-    --violet-glow: oklch(78% 0.16 302);
 
-    --global: oklch(73% 0.15 251);
-    --ai: oklch(79% 0.13 222);
-    --market: oklch(79% 0.165 154);
-    --ev: oklch(83% 0.155 83);
     --science: oklch(79% 0.16 302);
-    --startup: oklch(77% 0.16 32);
+    --technology: oklch(79% 0.13 222);
+    --engineering: oklch(83% 0.155 83);
+    --mathematics: oklch(79% 0.165 154);
 
     --border: oklch(100% 0 0 / 0.11);
     --border-strong: oklch(100% 0 0 / 0.22);
@@ -295,7 +275,7 @@ a {
 }
 
 ::selection {
-  background: var(--hot);
+  background: var(--primary);
   color: var(--primary-foreground);
 }
 

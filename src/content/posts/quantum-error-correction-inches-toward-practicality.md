@@ -1,13 +1,12 @@
 ---
 title: "Quantum Error Correction Inches Toward Practicality"
 description: "The field is making incremental gains in stability, but useful quantum advantage still depends on systems engineering."
-category: science-lab
+category: science
 author: rafael-stone
 publishedAt: 2026-06-18T00:00:00.000Z
-readMinutes: 1
 tags:
-  - quantum
   - research
+  - quantum
   - computing
 cover: ../../assets/covers/cover.CY2zhAdv.jpg
 coverAlt: "Detailed circuit board with a central processing chip"

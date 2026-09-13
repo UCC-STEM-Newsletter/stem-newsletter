@@ -39,7 +39,7 @@ const [lead, ...rest] = posts;
 
 <BaseLayout
   title={`${name} stories | ${site.name}`}
-  description={`Latest ${name} reporting, analysis, and briefings on Semnal.`}
+  description={`Catalyst ${name} coverage: reporting, explainers, and student research.`}
 >
   <section class="mx-auto max-w-7xl px-6 pt-12 lg:px-10">
     <div class="opener rule-top border-b border-border pt-4 pb-7">
@@ -52,7 +52,9 @@ const [lead, ...rest] = posts;
           {meta?.description}
         </p>
         <p class="eyebrow mt-4 text-muted-foreground">
-          {pluralize(posts.length, 'story')}, newest first
+          {posts.length === 0
+            ? 'Nothing published yet'
+            : `${pluralize(posts.length, 'story')}, newest first`}
         </p>
       </div>
     </div>
@@ -61,6 +63,23 @@ const [lead, ...rest] = posts;
   <section class="mx-auto max-w-7xl px-6 pt-10 lg:px-10">
     <div class="grid gap-x-8 gap-y-12 lg:grid-cols-[1fr_340px]">
       <div class="opener space-y-10">
+        {
+          !lead && (
+            <div class="border border-border bg-card p-6">
+              <h2 class="font-display text-2xl font-bold">No {name} stories yet</h2>
+              <p class="mt-2 text-muted-foreground">
+                This desk is open but nothing has been filed to it yet. In the meantime, the
+                rest of the archive is worth a look.
+              </p>
+              <a
+                href="/all-news/"
+                class="button-quiet mt-5 inline-flex min-h-10 items-center px-4 text-sm font-semibold"
+              >
+                Browse all stories
+              </a>
+            </div>
+          )
+        }
         {lead && <StoryOverlay post={lead} />}
         {
           rest.length > 0 && (
@@ -73,7 +92,10 @@ const [lead, ...rest] = posts;
         }
       </div>
 
-      <aside class="lg:border-l lg:border-border lg:pl-8" aria-labelledby="across-site-heading">
+      <aside
+        class:list={['lg:border-l lg:border-border lg:pl-8', !lead && 'hidden lg:block']}
+        aria-labelledby="across-site-heading"
+      >
         <div class="article-rail sticky">
           <div class="rule-top mb-1 flex items-baseline justify-between gap-4 pt-3">
             <h2 id="across-site-heading" class="font-display text-xl font-extrabold">
