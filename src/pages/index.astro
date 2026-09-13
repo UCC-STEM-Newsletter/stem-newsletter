@@ -2,8 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import StoryOverlay from '../components/StoryOverlay.astro';
-import StoryTile from '../components/StoryTile.astro';
 import StoryMini from '../components/StoryMini.astro';
+import StoryTile from '../components/StoryTile.astro';
 import StoryRank from '../components/StoryRank.astro';
 import DeskSection from '../components/DeskSection.astro';
 import Contribute from '../components/Contribute.astro';
@@ -25,17 +25,15 @@ const used = new Set<string>();
 const lead = leadPost(posts);
 if (lead) used.add(lead.id);
 
-const tiles = takeUnused(posts, plan.tiles, used);
-for (const post of tiles) used.add(post.id);
-
 const latest = plan.splitBand ? takeUnused(posts, plan.latest, used) : [];
 for (const post of latest) used.add(post.id);
 
-// A curated list minus anything already shown above. Skipped entirely when too
-// few picks survive, rather than rendering a stub chart.
-const picked = pickPosts(posts, picks)
-  .filter((post) => !used.has(post.id))
-  .slice(0, plan.picks);
+// A curated list minus anything already shown above, trimmed to whole rows of
+// the three-column grid so the chart never ends on a single orphan card.
+// Skipped entirely when too few picks survive.
+const availablePicks = pickPosts(posts, picks).filter((post) => !used.has(post.id));
+const picksThatFit = Math.floor(Math.min(availablePicks.length, plan.picks) / 3) * 3;
+const picked = availablePicks.slice(0, picksThatFit);
 const showPicks = picked.length >= PICKS_MINIMUM;
 if (showPicks) for (const post of picked) used.add(post.id);
 
@@ -45,9 +43,15 @@ const desks = categories
   .filter((desk) => desk.posts.length >= plan.deskMinimum);
 
 const remaining = posts.filter((post) => !used.has(post.id));
-const closing = plan.closing === 0 ? remaining : remaining.slice(0, plan.closing);
-// Tier A shows everything left; later tiers only bother with a full row.
-const showClosing = plan.closing === 0 ? closing.length > 0 : closing.length >= 4;
+// Tier A has to show everything left, so it takes a ragged final row if that is
+// what the archive gives. From tier B the closing grid is a sampler, so it is
+// trimmed to whole rows of three.
+const closingFits =
+  plan.closing === 0
+    ? remaining.length
+    : Math.floor(Math.min(remaining.length, plan.closing) / 3) * 3;
+const closing = remaining.slice(0, closingFits);
+const showClosing = plan.closing === 0 ? closingFits > 0 : closingFits >= 3;
 
 // With a split band the lead region is two columns of a single grid row.
 // Because grid items stretch, the hero fills whatever height the rail needs, so
@@ -63,9 +67,9 @@ const split = plan.splitBand && latest.length > 0;
       class:list={[
         'opener grid gap-x-8',
         // Three columns, with the hero across the first two. That is the same
-        // spine the tiles and desk grids use, so the divider between the hero
-        // and the rail falls on the tiles' second hairline rather than at some
-        // position of its own.
+        // spine every grid below uses, so the divider between the hero and the
+        // rail falls on their second hairline rather than at a position of its
+        // own.
         split ? 'col-rules-split gap-y-12 lg:grid-cols-3' : 'gap-y-0',
       ]}
     >
@@ -92,20 +96,8 @@ const split = plan.splitBand && latest.length > 0;
   </section>
 
   {
-    tiles.length > 0 && (
-      <section class="mx-auto max-w-7xl px-5 pt-14 sm:px-6 lg:px-10">
-        <div class="grid-cards col-rules-3 grid gap-x-8 gap-y-10 md:grid-cols-3">
-          {tiles.map((post) => (
-            <StoryTile post={post} />
-          ))}
-        </div>
-      </section>
-    )
-  }
-
-  {
     showPicks && (
-      <div class="reveal pt-20">
+      <div class="reveal pt-14">
         <section class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-10" aria-labelledby="picks-heading">
           <SectionHeading
             heading="Editor's picks"

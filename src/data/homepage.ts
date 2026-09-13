@@ -23,8 +23,6 @@ export interface Composition {
    * lead simply spans the full width.
    */
   splitBand: boolean;
-  /** Supporting tiles in their own full-width row beneath the lead region. */
-  tiles: number;
   /** Items in the "Latest" rail beside the lead. */
   latest: number;
   /**
@@ -41,15 +39,14 @@ export interface Composition {
 /**
  * Tier boundaries.
  *
- * - A (1–6): too few stories to split by desk. One lead plus everything else.
- * - B (7–19): enough for a lead, a rail and desk blocks for the fuller desks.
+ * - A (1–7): not enough to fill a rail beside the lead, so the lead runs full
+ *   width and everything else sits in one grid.
+ * - B (8–19): a lead beside a four-item rail, plus desk blocks for the fuller
+ *   desks.
  * - C (20+): the full front page, including the picks chart.
  */
 const TIER_C_FROM = 20;
-const TIER_B_FROM = 7;
-
-/** Below this there is nothing meaningful to put beside the lead. */
-const SPLIT_BAND_FROM = 5;
+const TIER_B_FROM = 8;
 
 export const tierFor = (count: number): Tier => {
   if (count >= TIER_C_FROM) return 'C';
@@ -65,15 +62,17 @@ export const tierFor = (count: number): Tier => {
  */
 export const compositionFor = (count: number): Composition => {
   const tier = tierFor(count);
-  const splitBand = count >= SPLIT_BAND_FROM;
 
+  // The band is exactly as tall as the rail, since the hero fills whatever the
+  // rail needs. A two-item rail would make a squat banner of the lead, so the
+  // split only starts once the rail can hold a full set.
   if (tier === 'C') {
-    return { tier, splitBand, tiles: 3, latest: 5, picks: 6, deskMinimum: 2, closing: 9 };
+    return { tier, splitBand: true, latest: 5, picks: 6, deskMinimum: 2, closing: 9 };
   }
   if (tier === 'B') {
-    return { tier, splitBand, tiles: 3, latest: 4, picks: 6, deskMinimum: 2, closing: 9 };
+    return { tier, splitBand: true, latest: 4, picks: 6, deskMinimum: 2, closing: 9 };
   }
-  return { tier, splitBand, tiles: 3, latest: 2, picks: 0, deskMinimum: 1, closing: 0 };
+  return { tier, splitBand: false, latest: 0, picks: 0, deskMinimum: 1, closing: 0 };
 };
 
 /**
@@ -81,7 +80,7 @@ export const compositionFor = (count: number): Composition => {
  *
  * Listed in rank order and interleaved across desks so that whichever ones
  * survive de-duplication still read as a varied chart. Picks already shown in
- * the lead, tiles or Latest rail are skipped, and the whole block is dropped
+ * the lead or Latest rail are skipped, and the whole block is dropped
  * when fewer than `PICKS_MINIMUM` remain — at a small archive that keeps the
  * front page free of a chart that would only repeat everything else on it.
  */

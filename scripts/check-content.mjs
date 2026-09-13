@@ -143,7 +143,6 @@ for (const story of stories) {
 console.log(`\nContent: ${stories.length} stories in ${path.relative(ROOT, POSTS_DIR)}/`);
 console.log(
   `Front page: tier ${plan.tier} — ${plan.splitBand ? 'lead + Latest rail' : 'full-width lead'}` +
-    `${plan.tiles ? ` + ${plan.tiles} tiles` : ''}` +
     `${plan.picks ? `, up to ${plan.picks} picks` : ''}` +
     `, desks need ${plan.deskMinimum}+ stories\n`,
 );

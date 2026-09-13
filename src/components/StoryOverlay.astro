@@ -15,8 +15,13 @@ interface Props {
   /**
    * Stretch to the height of the surrounding grid row instead of holding a
    * fixed aspect ratio. This is what keeps the homepage's hero and its side
-   * rail level: both are columns of one grid row, so the hero simply fills
-   * whatever height the rail needs. The image crops to fit.
+   * rail level: both are columns of one grid row, so the hero fills whatever
+   * height the rail needs, and the image crops to fit.
+   *
+   * The image is taken out of flow while filling. Left in flow it would impose
+   * its own intrinsic height, and a portrait cover would then make the hero
+   * taller than the rail, leaving the rail short of the shared bottom edge —
+   * exactly the imbalance this is meant to avoid.
    */
   fill?: boolean;
   /** Overrides the frame classes; rarely needed. */
@@ -45,7 +50,7 @@ const author = authorBySlug.get(post.data.author);
       alt={post.data.coverAlt}
       loading="eager"
       decoding="async"
-      class="h-full w-full object-cover"
+      class:list={['h-full w-full object-cover', fill && 'absolute inset-0']}
     />
     <div class="image-scrim" aria-hidden="true"></div>
     <div class="absolute inset-x-0 bottom-0 max-w-4xl p-5 md:p-8 lg:p-10">
